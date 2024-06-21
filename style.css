@@ -1,0 +1,301 @@
+/* Import the fonts */
+@import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Montserrat:wght@400;700&display=swap');
+
+/* Apply the fonts to your elements */
+body, td, th, tr, p, a {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+}
+
+strong, .name {
+    font-family: 'Lora', serif;
+    font-size: 24px; /* Adjust the size as needed */
+    font-weight: normal;
+}
+
+a {
+    color: inherit; /* Ensure the link color matches the surrounding text */
+    text-decoration: underline; /* Add underline to the link */
+}
+
+a:hover, a:focus {
+    color: #000000; /* Change color on hover and focus */
+    text-decoration: underline; /* Ensure underline remains on hover and focus */
+}
+
+heading {
+    font-family: 'Lora', serif;
+    font-size: 22px;
+}
+
+papertitle {
+    font-family: 'Lora', serif;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+/* Navigation Bar */
+nav {
+    width: 100%;
+    background-color: white;
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+    padding: 20px 0;
+    display: flex; /* Use flexbox for the navbar */
+    align-items: center; /* Center items vertically */
+    justify-content: space-between; /* Space out the items */
+}
+
+.nav-left {
+    margin-left: 50px; /* Adjust margin to move the name right */
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex; /* Use flexbox for the list */
+}
+
+nav ul li {
+    margin-right: 40px; /* Adjust the spacing between the items */
+}
+
+nav ul li a {
+    color: #000;
+    text-align: center;
+    padding: 0; /* Remove padding to avoid additional space */
+    text-decoration: none;
+    font-weight: normal;
+    position: relative; /* Position relative for the underline */
+}
+
+nav ul li a::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 2px;
+    background: #000;
+    transition: width .3s;
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+nav ul li a:hover::after,
+nav ul li a.active::after {
+    width: 100%;
+}
+
+nav ul li a:hover {
+    color: #000000;
+    text-decoration: none; /* Ensure no underline on hover */
+}
+
+body {
+    padding-top: 60px;
+}
+
+.content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.coursework-columns {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.column {
+    width: 48%;
+}
+
+.column h1 {
+    font-family: 'Lora', serif;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.semester {
+    margin-bottom: 20px;
+}
+
+.semester h2 {
+    font-family: 'Lora', serif;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.semester ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.semester ul li {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.project-header h2 {
+    font-family: 'Lora', serif;
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.project-date {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    color: #888;
+}
+
+.project p {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    margin: 10px 0;
+}
+
+.project a {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    color: #000000;
+    text-decoration: underline; /* Add underline to project links */
+}
+
+.project a:hover {
+    color: #000000;
+}
+
+.project {
+    margin-bottom: 20px;
+}
+
+.footer {
+    text-align: center;
+    margin-top: -20px;
+    padding: 20px;
+    font-size: 14px;
+    color: #888;
+}
+
+.footer a {
+    color: #000000;
+    text-decoration: underline; /* Ensure footer links are underlined */
+}
+
+.footer a:hover {
+    color: #000000;
+    text-decoration: underline;
+}
+
+/* Blog Page Styles */
+.blog-posts .blog-post {
+    margin-bottom: 40px;
+}
+
+/* Blog listing page styles */
+.blog-post h2 a {
+    font-family: 'Lora', serif;
+    font-size: 28px;
+    font-weight: normal;
+    color: #1a1a1a;
+    text-decoration: none;
+    line-height: 1.2;
+}
+
+.blog-post h2 a:hover {
+    color: #000000;
+}
+
+.blog-post .post-meta {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    color: #4a4a4a;
+    margin-bottom: 5px;
+}
+
+/* Blog Title */
+.content h1 {
+    font-family: 'Lora', serif;
+    font-size: 36px;
+    font-weight: normal;
+    color: black;
+    margin-bottom: 30px;
+}
+
+/* Individual blog post page styles */
+.post-title {
+    font-family: 'Lora', serif;
+    font-size: 36px;
+    font-weight: normal;
+    color: #4a4a4a;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.post-meta {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    color: #4a4a4a;
+    margin-bottom: 20px;
+}
+
+.post-content {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #333;
+}
+
+/* Ensure the name link has proper styles */
+a.name {
+    color: inherit; /* Ensure the color of the name link matches the text */
+    text-decoration: none; /* Remove underline from the name link */
+}
+
+a.name:hover {
+    color: #000000; /* Change color on hover for the name link */
+}
+
+.highlight-item {
+    margin-bottom: 20px;
+}
+
+.highlight-item h3 {
+    margin-bottom: 5px;
+}
+
+.cta-section {
+    background-color: #f8f8f8;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.cta-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.cta-button:hover {
+    background-color: #0056b3;
+}
