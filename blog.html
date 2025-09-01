@@ -1,42 +1,46 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
-<title>Blog - Veer Pareek</title>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
-<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&amp;family=Montserrat:wght@400;700&amp;display=swap" rel="stylesheet"/>
-<link href="style.css" rel="stylesheet" type="text/css"/>
+<title>Blog - Veer</title>
+<link href="style.css" rel="stylesheet"/>
 </head>
 <body>
-<!-- Navigation Bar -->
 <nav>
-<div class="nav-left">
-<a class="name" href="index.html">Veer Pareek</a></div>
+<div class="nav-left"><a class="name" href="index.html">Veer</a></div>
 <ul>
 <li><a href="index.html">Home</a></li>
-<li><a href="coursework.html">Coursework</a></li>
-<li><a href="projects.html">Projects</a></li>
 <li><a class="active" href="blog.html">Blog</a></li>
+<li><a href="https://github.com/vpareek2" rel="noopener" target="_blank">GitHub</a></li>
+<li><button aria-label="Toggle theme" class="theme-toggle" id="theme-toggle">☾</button></li>
 </ul>
 </nav>
-<!-- Blog Content -->
-<div class="content">
-<h1>Blog</h1>
-<div class="blog-posts">
-    <div class="blog-post">
-        <h2><a href="./blogs/annotated.html">The Annotated Series</a></h2>
-    </div>
-    <div class="blog-post">
-        <div class="post-meta">Veer Pareek - August 14, 2024</div>
-        <h2><a href="./blogs/posts_html/blog3.html">VLM-o: Findings on Improving Object Detection in Image Analysis</a></h2>
-    </div>
-    <div class="blog-post">
-        <div class="post-meta">Veer Pareek - July 21, 2024</div>
-        <h2><a href="./blogs/posts_html/blog1.html">Vector Databases: Navigating the New Frontier of Data Management</a></h2>
-    </div>
-</div>
-</div>
-</div>
+<main class="wrap minimal">
+<!-- Intro -->
+<section class="section tight center">
+<h1 class="title">Hi, i'm veer, enjoy.</h1>
+</section>
+<section class="section">
+<div class="section-head"><h2>Recents</h2></div>
+<ul class="blog-list cards" id="post-list"><li class="post-card"><a class="blog-link" href="blogs/posts_html/blog3.html"><div><div class="pcard-date">March 2, 2024</div><div class="pcard-title">VLM-o: Kinda Technical Report</div><div class="pcard-excerpt">A somewhat technical blog on VLMs — implementing, fine-tuning, and lessons learned.</div></div></a></li></ul>
+</section>
+</main>
+<footer class="footer"><span>© Veer</span></footer>
+<script>
+    (function () {
+      var root = document.documentElement;
+      var key = 'theme';
+      var btn = document.getElementById('theme-toggle');
+      function apply(theme) { root.setAttribute('data-theme', theme); }
+      function current() { return root.getAttribute('data-theme') || 'dark'; }
+      var saved = localStorage.getItem(key);
+      apply(saved || 'dark');
+      function label() { if (!btn) return; btn.textContent = current() === 'dark' ? '☀︎' : '☾'; }
+      label();
+      if (btn) btn.addEventListener('click', function(){ var next = current()==='dark'?'light':'dark'; apply(next); localStorage.setItem(key,next); label();});
+    })();
+  </script>
 </body>
 </html>

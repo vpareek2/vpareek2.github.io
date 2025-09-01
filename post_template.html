@@ -1,33 +1,87 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>{{ title }} - Veer Pareek</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="../../style.css" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <title>{{ title }} - Veer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="../../style.css" rel="stylesheet" />
+  <!-- MathJax for LaTeX in posts -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(','\\)'], ['$', '$']],
+        displayMath: [['\\[','\\]'], ['$$','$$']]
+      },
+      options: {
+        skipHtmlTags: ['script','noscript','style','textarea','pre','code'],
+        renderActions: {
+          findScript: [10, function (doc) {
+            var scripts = document.querySelectorAll('script[type^="math/tex"]');
+            for (var i = 0; i < scripts.length; i++) {
+              var node = scripts[i];
+              var display = !!node.type.match(/;\s*mode=display/);
+              var math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              var text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = { node: text, delim: '', n: 0 };
+              math.end = { node: text, delim: '', n: 0 };
+              doc.math.push(math);
+            }
+          }, '']
+        }
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <nav>
-        <div class="nav-left">
-            <a href="../../index.html" class="name">Veer Pareek</a>
-        </div>
-        <ul>
-            <li><a href="../../index.html">Home</a></li>
-            <li><a href="../../coursework.html">Coursework</a></li>
-            <li><a href="../../projects.html">Projects</a></li>
-            <li><a href="../../blog.html" class="active">Blog</a></li>
-        </ul>
-    </nav>
-    
-    <!-- Blog Post Content -->
-    <div class="content">
-        {{ content }}
+  <!-- Navigation Bar (consistent with site) -->
+  <nav>
+    <div class="nav-left">
+      <a href="../../index.html" class="name">Veer</a>
     </div>
-    
-    <!-- Footer -->
-    <div class="footer">
-        <!-- Add your footer content here -->
-    </div>
+    <ul>
+      <li><a href="../../index.html">Home</a></li>
+      <li><a href="../../blog.html" class="active">Blog</a></li>
+      <li><a href="https://github.com/vpareek2" target="_blank" rel="noopener">GitHub</a></li>
+      <li><button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">☾</button></li>
+    </ul>
+  </nav>
+
+  <!-- Blog Post Content -->
+  <main class="wrap minimal">
+    <section class="section">
+      {{ content }}
+    </section>
+  </main>
+
+  <footer class="footer"><span>© Veer</span></footer>
+
+  <!-- Theme toggle script (same as other pages) -->
+  <script>
+    (function () {
+      var root = document.documentElement;
+      var key = 'theme';
+      var btn = document.getElementById('theme-toggle');
+      function apply(theme) { root.setAttribute('data-theme', theme); }
+      function current() { return root.getAttribute('data-theme') || 'dark'; }
+      var saved = localStorage.getItem(key);
+      apply(saved || 'dark');
+      function label() { if (!btn) return; btn.textContent = current() === 'dark' ? '☀︎' : '☾'; }
+      label();
+      if (btn) btn.addEventListener('click', function(){ var next = current()==='dark'?'light':'dark'; apply(next); localStorage.setItem(key,next); label();});
+    })();
+  </script>
+  <!-- Ensure MathJax typesets after load -->
+  <script>
+    (function(){
+      function typeset(){
+        if (window.MathJax && window.MathJax.typesetPromise) { window.MathJax.typesetPromise(); }
+        else if (window.MathJax && window.MathJax.typeset) { window.MathJax.typeset(); }
+      }
+      if (document.readyState === 'complete') typeset();
+      else window.addEventListener('load', typeset);
+    })();
+  </script>
 </body>
 </html>
