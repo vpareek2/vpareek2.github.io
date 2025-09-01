@@ -1,3 +1,11 @@
+---
+title: "VLM-o: Kinda Technical Report"
+date: "2024-03-02"
+summary: "A somewhat technical blog on VLMs — implementing, fine-tuning, and lessons learned."
+tags: [vlm, lora, project]
+draft: false
+---
+
 # VLM-o: Kinda Technical Report
 
 ## Summary

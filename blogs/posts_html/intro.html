@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Welcome - Veer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="../../style.css" rel="stylesheet" />
+  <!-- MathJax for LaTeX in posts -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(','\\)'], ['$', '$']],
+        displayMath: [['\\[','\\]'], ['$$','$$']]
+      },
+      options: {
+        skipHtmlTags: ['script','noscript','style','textarea','pre','code'],
+        renderActions: {
+          findScript: [10, function (doc) {
+            var scripts = document.querySelectorAll('script[type^="math/tex"]');
+            for (var i = 0; i < scripts.length; i++) {
+              var node = scripts[i];
+              var display = !!node.type.match(/;\s*mode=display/);
+              var math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              var text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = { node: text, delim: '', n: 0 };
+              math.end = { node: text, delim: '', n: 0 };
+              doc.math.push(math);
+            }
+          }, '']
+        }
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+  <!-- Navigation Bar (consistent with site) -->
+  <nav>
+    <div class="nav-left">
+      <a href="../../index.html" class="name">Veer</a>
+    </div>
+    <ul>
+      <li><a href="../../index.html">Home</a></li>
+      <li><a href="../../blog.html" class="active">Blog</a></li>
+      <li><a href="https://github.com/vpareek2" target="_blank" rel="noopener">GitHub</a></li>
+      <li><button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">☾</button></li>
+    </ul>
+  </nav>
+
+  <!-- Blog Post Content -->
+  <main class="wrap minimal">
+    <section class="section">
+      <h1 class="post-title">Welcome</h1><div class="post-meta">September 01, 2025 • Written By Veer</div><div class="post-content"><p>I am Veer. I like to predict things based on data. </p>
+<h2 id="background">Background</h2>
+<p>I recently graduated from the University of Illinois Urbana-Champaign with a major in data-science and minors in computer science and french. I just moved to the bay area and I am now working at Striim, a real-time data streaming company as a machine learning engineer. I have always loved to use data to make predictions. From being a child predicting the whole nfl season based on the previous stats to running efficiency simulations for lineups on nba2k15, I have always enjoyed data science. In modern times, the world has become obsessed with predicting the next-token, as have I. I'm writing this blog/maintaining this website mostly to ensure I keep tinkering with projects and keep learning.</p>
+<h2 id="current-projects">Current projects</h2>
+<p>Currently I am in a bit of a lull space where I am not working on a major project. I am mostly refining my skills in core computer science topics so I can excel at my current role of a swe/mle. I am also getting my math skills better to gain a deeper intuition into machine learning topics. I may document some learnings here as well. But in my free time, I think about what "high-quality" data actually means in the current state of ML. Also, how core technologies will change as the world gets more accustomed to Natural Language Interfaces. </p>
+<p>While I have a lot of projects on my github, my most impactful work has come through my research at UIUC, post incoming. </p>
+<p>Feel free to reach out with any questions, advice, or anything else.</p></div>
+    </section>
+  </main>
+
+  <footer class="footer"><span>© Veer</span></footer>
+
+  <!-- Theme toggle script (same as other pages) -->
+  <script>
+    (function () {
+      var root = document.documentElement;
+      var key = 'theme';
+      var btn = document.getElementById('theme-toggle');
+      function apply(theme) { root.setAttribute('data-theme', theme); }
+      function current() { return root.getAttribute('data-theme') || 'dark'; }
+      var saved = localStorage.getItem(key);
+      apply(saved || 'dark');
+      function label() { if (!btn) return; btn.textContent = current() === 'dark' ? '☀︎' : '☾'; }
+      label();
+      if (btn) btn.addEventListener('click', function(){ var next = current()==='dark'?'light':'dark'; apply(next); localStorage.setItem(key,next); label();});
+    })();
+  </script>
+  <!-- Ensure MathJax typesets after load -->
+  <script>
+    (function(){
+      function typeset(){
+        if (window.MathJax && window.MathJax.typesetPromise) { window.MathJax.typesetPromise(); }
+        else if (window.MathJax && window.MathJax.typeset) { window.MathJax.typeset(); }
+      }
+      if (document.readyState === 'complete') typeset();
+      else window.addEventListener('load', typeset);
+    })();
+  </script>
+</body>
+</html>
