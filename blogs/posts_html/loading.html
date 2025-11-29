@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Loading... - Veer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="../../style.css" rel="stylesheet" />
+</head>
+<body>
+  <!-- Navigation Bar (consistent with site) -->
+  <nav>
+    <div class="nav-left">
+      <a href="../../index.html" class="name">Veer</a>
+    </div>
+    <ul>
+      <li><a href="../../index.html">Home</a></li>
+      <li><a href="../../blog.html" class="active">Blog</a></li>
+      <li><a href="https://github.com/vpareek2" target="_blank" rel="noopener">GitHub</a></li>
+      <li><button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">☾</button></li>
+    </ul>
+  </nav>
+
+  <!-- Blog Post Content -->
+  <main class="wrap minimal">
+    <section class="section">
+      <article class="post">
+        <h1>Loading...</h1>
+      </article>
+    </section>
+  </main>
+
+  <footer class="footer"><span>© Veer</span></footer>
+
+  <!-- Theme toggle script (same as other pages) -->
+  <script>
+    (function () {
+      var root = document.documentElement;
+      var key = 'theme';
+      var btn = document.getElementById('theme-toggle');
+      function apply(theme) { root.setAttribute('data-theme', theme); }
+      function current() { return root.getAttribute('data-theme') || 'dark'; }
+      var saved = localStorage.getItem(key);
+      apply(saved || 'dark');
+      function label() { if (!btn) return; btn.textContent = current() === 'dark' ? '☀︎' : '☾'; }
+      label();
+      if (btn) btn.addEventListener('click', function(){ var next = current()==='dark'?'light':'dark'; apply(next); localStorage.setItem(key,next); label();});
+    })();
+  </script>
+</body>
+</html>
+
