@@ -1,0 +1,351 @@
+:root {
+  --background: #010603;
+  --text: #d7dbd2;
+  --muted: #849087;
+  --green: #5b9668;
+  --gold: #b7a16d;
+  --noise: rgba(66, 105, 73, .085);
+}
+
+* { box-sizing: border-box; }
+
+html { background: var(--background); }
+
+body {
+  min-width: 320px;
+  margin: 0;
+  overflow-x: hidden;
+  background: var(--background);
+  color: var(--text);
+  font-family: ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.65;
+  letter-spacing: .025em;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  color: var(--background);
+  background: var(--green);
+}
+
+#character-field {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.matrix-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  min-height: 100svh;
+  padding: clamp(1.5rem, 4vw, 4rem);
+  display: flex;
+  flex-direction: column;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover,
+a:focus-visible { color: var(--gold); }
+
+header,
+footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+header nav,
+footer nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(1.25rem, 3vw, 3rem);
+}
+
+.name { color: var(--text); }
+.page-active { --settled-color: var(--gold); }
+
+main {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(18rem, .8fr) minmax(28rem, 1.2fr);
+  gap: clamp(4rem, 10vw, 11rem);
+  align-items: center;
+  padding: clamp(5rem, 11vh, 9rem) clamp(0rem, 5vw, 5rem);
+}
+
+.identity {
+  max-width: 37rem;
+  align-self: start;
+  margin-top: clamp(1rem, 7vh, 6rem);
+}
+
+.right-column {
+  width: 100%;
+  max-width: 48rem;
+  min-height: 100%;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: clamp(4rem, 9vh, 7rem);
+}
+
+.identity h1 {
+  margin: 2.1rem 0 1.5rem;
+  font-size: 1.15rem;
+  font-weight: 400;
+  letter-spacing: .04em;
+}
+
+.identity > p:not(.label) {
+  max-width: 35rem;
+  margin: 0 0 1rem;
+}
+
+.label,
+.status,
+.index {
+  --settled-color: var(--gold);
+  margin: 0;
+  font-size: .68rem;
+  letter-spacing: .13em;
+}
+
+.muted { --settled-color: var(--muted); }
+
+.history > h2 { margin: 0 0 1.5rem; font-weight: 400; }
+
+.history ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.history li {
+  display: grid;
+  grid-template-columns: 2rem 5rem minmax(0, 1fr);
+  align-items: start;
+  gap: 1.5rem;
+  padding: .4rem 0;
+}
+
+.history li p { margin: 0; }
+
+.history-detail {
+  display: grid;
+  gap: .12rem;
+}
+
+.history-minors {
+  font-size: .62rem;
+  letter-spacing: .06em;
+}
+
+.current-role {
+  display: block;
+}
+
+.current-role::after {
+  display: inline-block;
+  width: .42rem;
+  height: .42rem;
+  margin-left: .65rem;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 0 .18rem rgba(91, 150, 104, .12);
+  content: "";
+  opacity: 0;
+  transform: scale(.65);
+  vertical-align: .02rem;
+  animation: current-role-in 520ms ease 3.45s forwards;
+}
+
+@keyframes current-role-in {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.writing {
+  width: 100%;
+  align-self: end;
+}
+
+.writing > h2 { margin-bottom: 2rem; font-weight: 400; }
+
+.writing article {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr) auto;
+  gap: 1.5rem;
+  padding: 1.35rem 0;
+}
+
+.writing h3 {
+  margin: 0;
+  font-size: .82rem;
+  font-weight: 400;
+  letter-spacing: .025em;
+}
+
+.writing article div p {
+  max-width: 36rem;
+  margin: .45rem 0 0;
+}
+
+.index { --settled-color: var(--green); }
+.status { --settled-color: var(--green); white-space: nowrap; }
+
+footer {
+  color: var(--muted);
+  font-size: .64rem;
+  letter-spacing: .1em;
+}
+
+footer p { margin: 0; }
+
+.writings-page main {
+  display: flex;
+  width: 100%;
+  padding: clamp(5rem, 12vh, 10rem) clamp(0rem, 8vw, 8rem);
+}
+
+.writing-index {
+  width: min(100%, 68rem);
+  margin: auto;
+}
+
+.writing-intro {
+  margin-bottom: clamp(4rem, 10vh, 8rem);
+}
+
+.writing-intro h1 {
+  margin: 1.4rem 0 .7rem;
+  font-size: 1.15rem;
+  font-weight: 400;
+  letter-spacing: .04em;
+}
+
+.writing-intro > p:last-child { margin: 0; }
+
+.writing-list {
+  border-top: 1px solid transparent;
+  animation: divider-in 600ms ease 1.35s forwards;
+}
+
+.writing-list article {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr) auto;
+  gap: 1.5rem;
+  padding: 1.7rem 0;
+  border-bottom: 1px solid transparent;
+}
+
+.writing-list article:first-child {
+  animation: divider-in 600ms ease 2.05s forwards;
+}
+
+.writing-list article:nth-child(2) {
+  animation: divider-in 600ms ease 2.75s forwards;
+}
+
+.writing-list article > p,
+.writing-list article div > p { margin: 0; }
+
+.writing-list h2 {
+  margin: 0 0 .45rem;
+  font-size: .88rem;
+  font-weight: 400;
+  letter-spacing: .025em;
+}
+
+@keyframes divider-in {
+  to { border-color: rgba(132, 144, 135, .18); }
+}
+
+.has-js [data-matrix] { color: transparent; }
+.has-js [data-matrix].matrix-built { color: inherit; }
+
+.matrix-char {
+  color: transparent;
+  font-weight: 400;
+  text-shadow: none;
+  transition: color 130ms ease, text-shadow 160ms ease;
+}
+
+.matrix-char.flipping {
+  color: rgba(91, 150, 104, .3);
+}
+
+.matrix-char.settled {
+  color: var(--settled-color, var(--text));
+  text-shadow: 0 0 10px rgba(91, 150, 104, .08);
+}
+
+@media (max-width: 800px) {
+  .matrix-content { min-height: 1000px; }
+
+  main {
+    grid-template-columns: 1fr;
+    align-content: center;
+    gap: 6rem;
+    padding-inline: 0;
+  }
+
+  .identity { margin-top: 0; }
+  .right-column { gap: 5rem; }
+  .writing { align-self: auto; }
+}
+
+@media (max-width: 520px) {
+  header { align-items: flex-start; }
+  header nav { justify-content: flex-end; gap: .8rem 1.2rem; }
+  header nav a:nth-child(2) { display: none; }
+
+  .writing article {
+    grid-template-columns: 1.5rem minmax(0, 1fr);
+  }
+
+  .status {
+    grid-column: 2;
+    margin-top: .2rem;
+  }
+
+  footer { align-items: flex-end; }
+
+  .writing-list article {
+    grid-template-columns: 1.5rem minmax(0, 1fr);
+  }
+
+  .writing-list .status {
+    grid-column: 2;
+    margin-top: .2rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .matrix-char { transition: none; }
+
+  .current-role::after {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+
+  .writing-list,
+  .writing-list article {
+    border-color: rgba(132, 144, 135, .18);
+    animation: none;
+  }
+}

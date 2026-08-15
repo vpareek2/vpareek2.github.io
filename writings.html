@@ -1,29 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Writings — Veer Pareek</title>
-<script>(function(){var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);})();</script>
-<link href="style.css" rel="stylesheet"/>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<meta content="Writing by Veer Pareek about models, data, and machine learning systems." name="description">
+<meta content="Veer Pareek" name="author">
+<title>Writing — Veer Pareek</title>
+<script>document.documentElement.classList.add('has-js');</script>
+<link href="index.css" rel="stylesheet">
 </head>
-<body>
 
-<header class="site-header">
-<div class="site-header-inner">
-<nav aria-label="Main navigation" class="top-nav">
-<a href="index.html">Home</a>
-<a class="active" href="writings.html">Writings</a>
-</nav>
-<button aria-label="Toggle dark mode" class="theme-toggle" id="theme-toggle" type="button">☾</button>
+<body class="writings-page">
+<canvas id="character-field" aria-hidden="true"></canvas>
+
+<div class="matrix-content">
+  <header>
+    <a class="name" href="index.html" data-matrix data-delay="250" data-repeat>VEER PAREEK</a>
+    <nav aria-label="Main navigation">
+      <a class="page-active" href="writings.html" aria-current="page" data-matrix data-delay="400" data-repeat>WRITING</a>
+      <a href="https://github.com/vpareek2" data-matrix data-delay="500" data-repeat>GITHUB</a>
+      <a href="mailto:veerpareek12@gmail.com" data-matrix data-delay="600" data-repeat>EMAIL</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="writing-index" aria-labelledby="writing-page-title">
+      <div class="writing-intro">
+        <p class="label" data-matrix data-delay="800">INDEX / WRITING</p>
+        <h1 id="writing-page-title" data-matrix data-delay="1000">Writing</h1>
+        <p class="muted" data-matrix data-delay="1200">Notes on models, data, and machine learning systems.</p>
+      </div>
+
+      <div class="writing-list">
+        <article>
+          <p class="index" data-matrix data-delay="1450">01</p>
+          <div>
+            <h2 data-matrix data-delay="1600" data-repeat>Autoresearch on Kimi Delta Attention</h2>
+            <p class="muted" data-matrix data-delay="1750">Can an autonomous optimization loop beat the fastest available implementation?</p>
+          </div>
+          <p class="status" data-matrix data-delay="1900">IN PROGRESS</p>
+        </article>
+
+        <article>
+          <p class="index" data-matrix data-delay="2150">02</p>
+          <div>
+            <h2 data-matrix data-delay="2300" data-repeat>What remains of Common Crawl?</h2>
+            <p class="muted" data-matrix data-delay="2450">Tracing raw web data through filtering to find how many genuinely useful tokens survive.</p>
+          </div>
+          <p class="status" data-matrix data-delay="2600">IN PROGRESS</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p data-matrix data-delay="2850">© 2026 VEER PAREEK</p>
+    <a href="index.html" data-matrix data-delay="2950" data-repeat>← HOME</a>
+  </footer>
 </div>
-</header>
 
-<main>
-<h1>Writings</h1>
-<p>Loading...</p>
-</main>
-
-<script src="theme.js"></script>
+<script src="shuffle.js"></script>
 </body>
 </html>

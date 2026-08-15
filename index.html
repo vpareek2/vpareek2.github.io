@@ -1,45 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<meta content="Veer Pareek" name="author"/>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<meta content="Veer Pareek — machine learning engineer writing about models, data, and systems." name="description">
+<meta content="Veer Pareek" name="author">
 <title>Veer Pareek</title>
-<script>(function(){var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);})();</script>
-<link href="style.css" rel="stylesheet"/>
+<script>document.documentElement.classList.add('has-js');</script>
+<link href="index.css" rel="stylesheet">
 </head>
-<body class="home">
 
-<header class="site-header">
-<div class="site-header-inner">
-<nav aria-label="Main navigation" class="top-nav">
-<a class="active" href="index.html">Home</a>
-<a href="writings.html">Writings</a>
-</nav>
-<button aria-label="Toggle dark mode" class="theme-toggle" id="theme-toggle" type="button">☾</button>
+<body>
+<canvas id="character-field" aria-hidden="true"></canvas>
+
+<div class="matrix-content">
+  <header>
+    <a class="name" href="index.html" data-matrix data-delay="250" data-repeat>VEER PAREEK</a>
+    <nav aria-label="Main navigation">
+      <a href="writings.html" data-matrix data-delay="400" data-repeat>WRITING</a>
+      <a href="https://github.com/vpareek2" data-matrix data-delay="500" data-repeat>GITHUB</a>
+      <a href="mailto:veerpareek12@gmail.com" data-matrix data-delay="600" data-repeat>EMAIL</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="identity" aria-labelledby="identity-title">
+      <p class="label" data-matrix data-delay="750">MACHINE LEARNING ENGINEER</p>
+      <h1 id="identity-title" data-matrix data-delay="950">Veer Pareek</h1>
+      <p data-matrix data-delay="1150">I work on post-training for code generation and real-time inference at Striim.</p>
+      <p class="muted" data-matrix data-delay="1350">Interested in data distributions, optimization dynamics, and fast ML systems outside the batch setting.</p>
+    </section>
+
+    <div class="right-column">
+      <aside class="history" aria-labelledby="history-title">
+        <h2 class="label" id="history-title" data-matrix data-delay="1500">HISTORY</h2>
+        <ol>
+          <li>
+            <p class="index" data-matrix data-delay="1600">01</p>
+            <p data-matrix data-delay="1700">UIUC</p>
+            <div class="history-detail">
+              <p data-matrix data-delay="1800">DATA SCIENCE</p>
+              <p class="muted history-minors" data-matrix data-delay="1875">MINORS / COMPUTER SCIENCE + FRENCH</p>
+            </div>
+          </li>
+          <li>
+            <p class="index" data-matrix data-delay="1900">02</p>
+            <p data-matrix data-delay="2000">STRIIM</p>
+            <p class="current-role" aria-label="Machine learning engineer, current role" data-matrix data-delay="2100">MACHINE LEARNING ENGINEER</p>
+          </li>
+        </ol>
+      </aside>
+
+      <section class="writing" id="writing" aria-labelledby="writing-title">
+      <h2 class="label" id="writing-title" data-matrix data-delay="2250">WRITING</h2>
+
+      <article>
+        <p class="index" data-matrix data-delay="2350">01</p>
+        <div>
+          <h3 data-matrix data-delay="2450" data-repeat>Autoresearch on Kimi Delta Attention</h3>
+          <p class="muted" data-matrix data-delay="2550">Can an autonomous optimization loop beat the fastest available implementation?</p>
+        </div>
+        <p class="status" data-matrix data-delay="2650">IN PROGRESS</p>
+      </article>
+
+      <article>
+        <p class="index" data-matrix data-delay="2750">02</p>
+        <div>
+          <h3 data-matrix data-delay="2850" data-repeat>What remains of Common Crawl?</h3>
+          <p class="muted" data-matrix data-delay="2950">Tracing raw web data through filtering to find how many genuinely useful tokens survive.</p>
+        </div>
+        <p class="status" data-matrix data-delay="3050">IN PROGRESS</p>
+      </article>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <p data-matrix data-delay="3250">© 2026 VEER PAREEK</p>
+    <nav aria-label="Elsewhere">
+      <a href="https://x.com/veerpareek_" data-matrix data-delay="3350" data-repeat>X</a>
+      <a href="https://www.linkedin.com/in/veerpareek/" data-matrix data-delay="3450" data-repeat>LINKEDIN</a>
+    </nav>
+  </footer>
 </div>
-</header>
 
-<header class="site-title">
-<h1>Veer Pareek</h1>
-</header>
-
-<main class="home-main">
-<p>I am a machine learning engineer at <a href="https://www.striim.com/">Striim</a>, working on post-training for code generation and real-time inference. I graduated from the <a href="https://illinois.edu/">University of Illinois Urbana-Champaign</a> majoring in data science with minors in computer science and french.</p>
-
-<p>In my free time I enjoy lifting, hanging out with friends, and making bread (occasionally).</p>
-
-<p>I am passionate about machine learning research, specifically how data distributions shape optimization dynamics and parameter trajectories. I also work on making ML systems fast in streaming-native settings rather than batch-based ones. Currently I am exploring ideas in real-time llms, logically-constrained machine learning, and code generation.</p>
-
-<h2 id="more-information">More Information</h2>
-<ul>
-<li>Email: veerpareek12 at gmail dot com</li>
-<li>GitHub: <a href="https://github.com/vpareek2">vpareek2</a></li>
-<li>X: <a href="https://x.com/veerpareek_">@veerpareek_</a></li>
-<li>LinkedIn: <a href="https://www.linkedin.com/in/veerpareek/">veerpareek</a></li>
-</ul>
-</main>
-
-<script src="theme.js"></script>
+<script src="shuffle.js"></script>
 </body>
 </html>
