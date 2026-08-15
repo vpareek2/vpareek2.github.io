@@ -372,6 +372,43 @@ footer p { margin: 0; }
   letter-spacing: .025em;
 }
 
+.article-page main {
+  display: block;
+  width: 100%;
+  padding: clamp(5rem, 12vh, 10rem) clamp(0rem, 8vw, 8rem);
+}
+
+.post {
+  width: min(100%, 52rem);
+  margin: 0 auto;
+}
+
+.post-header {
+  max-width: 43rem;
+}
+
+.post-header h1 {
+  margin: 1.4rem 0 1rem;
+  font-size: clamp(1.45rem, 3.5vw, 2.25rem);
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: .025em;
+}
+
+.post-dek {
+  max-width: 39rem;
+  margin: 0;
+  color: var(--muted);
+  font-size: .88rem;
+}
+
+.post-status {
+  margin: clamp(4rem, 12vh, 8rem) 0 0;
+  color: var(--green);
+  font-size: .68rem;
+  letter-spacing: .13em;
+}
+
 @keyframes divider-in {
   to { border-color: var(--divider); }
 }
