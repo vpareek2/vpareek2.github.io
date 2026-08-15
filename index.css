@@ -4,7 +4,32 @@
   --muted: #849087;
   --green: #5b9668;
   --gold: #b7a16d;
-  --noise: rgba(66, 105, 73, .085);
+  --field-rgb: 72, 111, 78;
+  --field-alpha-min: .045;
+  --field-alpha-range: .045;
+  --divider: rgba(132, 144, 135, .18);
+  --shuffle: rgba(91, 150, 104, .3);
+  --glow: rgba(91, 150, 104, .08);
+  --switch-plate: #8f9991;
+  --switch-on: #c4a967;
+  --switch-halo: rgba(196, 169, 103, .2);
+}
+
+[data-theme="light"] {
+  --background: #ece9df;
+  --text: #142019;
+  --muted: #626d65;
+  --green: #2f7044;
+  --gold: #876b31;
+  --field-rgb: 42, 82, 54;
+  --field-alpha-min: .045;
+  --field-alpha-range: .04;
+  --divider: rgba(35, 60, 43, .16);
+  --shuffle: rgba(47, 112, 68, .32);
+  --glow: rgba(47, 112, 68, .07);
+  --switch-plate: #414a44;
+  --switch-on: #876b31;
+  --switch-halo: rgba(135, 107, 49, .2);
 }
 
 * { box-sizing: border-box; }
@@ -23,6 +48,7 @@ body {
   line-height: 1.65;
   letter-spacing: .025em;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 320ms ease, color 320ms ease;
 }
 
 ::selection {
@@ -68,8 +94,84 @@ footer {
 header nav,
 footer nav {
   display: flex;
+  align-items: center;
   flex-wrap: wrap;
   gap: clamp(1.25rem, 3vw, 3rem);
+}
+
+.theme-toggle {
+  display: none;
+  position: relative;
+  width: 1.5rem;
+  height: 2rem;
+  padding: 0;
+  border: 1px solid var(--switch-plate);
+  border-radius: .44rem;
+  background:
+    radial-gradient(circle at 50% .25rem, var(--switch-plate) 0 1px, transparent 1.2px),
+    radial-gradient(circle at 50% calc(100% - .25rem), var(--switch-plate) 0 1px, transparent 1.2px);
+  cursor: pointer;
+  opacity: 0;
+  transition: border-color 240ms ease, background-color 240ms ease, box-shadow 240ms ease;
+  animation: control-in 420ms ease 1.35s forwards;
+  vertical-align: middle;
+}
+
+.has-js .theme-toggle { display: inline-block; }
+
+[data-theme="light"] .theme-toggle {
+  box-shadow: 0 0 .6rem var(--switch-halo);
+}
+
+.theme-toggle::before,
+.theme-toggle::after {
+  position: absolute;
+  content: "";
+}
+
+.theme-toggle::before {
+  top: .53rem;
+  left: 50%;
+  width: .44rem;
+  height: .78rem;
+  border: 1px solid var(--switch-plate);
+  border-radius: .06rem;
+  transform: translateX(-50%);
+  transition: border-color 240ms ease;
+}
+
+.theme-toggle::after {
+  top: .9rem;
+  left: 50%;
+  width: .5rem;
+  height: .32rem;
+  border: 1px solid var(--switch-plate);
+  background: var(--switch-plate);
+  clip-path: polygon(0 0, 78% 0, 100% 100%, 18% 100%);
+  box-shadow: none;
+  transform: translateX(-50%);
+  transform-origin: center;
+  transition: top 260ms ease, transform 260ms ease, border-color 240ms ease, background-color 240ms ease, box-shadow 240ms ease;
+}
+
+[data-theme="light"] .theme-toggle::after {
+  top: .41rem;
+  border-color: var(--switch-on);
+  background: var(--switch-on);
+  box-shadow: 0 0 .48rem var(--switch-halo);
+  transform: translateX(-50%) rotate(180deg);
+}
+
+.theme-toggle:hover,
+.theme-toggle:focus-visible { border-color: var(--gold); }
+
+.theme-toggle:focus-visible {
+  outline: 1px solid var(--gold);
+  outline-offset: 3px;
+}
+
+@keyframes control-in {
+  to { opacity: 1; }
 }
 
 .name { color: var(--text); }
@@ -271,7 +373,7 @@ footer p { margin: 0; }
 }
 
 @keyframes divider-in {
-  to { border-color: rgba(132, 144, 135, .18); }
+  to { border-color: var(--divider); }
 }
 
 .has-js [data-matrix] { color: transparent; }
@@ -285,12 +387,12 @@ footer p { margin: 0; }
 }
 
 .matrix-char.flipping {
-  color: rgba(91, 150, 104, .3);
+  color: var(--shuffle);
 }
 
 .matrix-char.settled {
   color: var(--settled-color, var(--text));
-  text-shadow: 0 0 10px rgba(91, 150, 104, .08);
+  text-shadow: 0 0 10px var(--glow);
 }
 
 @media (max-width: 800px) {
@@ -345,7 +447,16 @@ footer p { margin: 0; }
 
   .writing-list,
   .writing-list article {
-    border-color: rgba(132, 144, 135, .18);
+    border-color: var(--divider);
     animation: none;
   }
+
+  .theme-toggle {
+    opacity: 1;
+    transition: none;
+    animation: none;
+  }
+
+  .theme-toggle::before,
+  .theme-toggle::after { transition: none; }
 }

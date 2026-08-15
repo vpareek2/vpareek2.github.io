@@ -4,6 +4,33 @@
   var states = [];
   var contentFrame = 0;
   var contentStarted = performance.now();
+  var themeToggle = document.querySelector('[data-theme-toggle]');
+
+  function isLightTheme() {
+    return document.documentElement.dataset.theme === 'light';
+  }
+
+  function updateThemeToggle() {
+    if (!themeToggle) return;
+    var light = isLightTheme();
+    var label = light ? 'Switch to dark mode' : 'Switch to light mode';
+    themeToggle.setAttribute('aria-label', label);
+    themeToggle.setAttribute('aria-pressed', String(light));
+    themeToggle.setAttribute('title', label);
+  }
+
+  updateThemeToggle();
+
+  if (themeToggle) {
+    themeToggle.addEventListener('click', function () {
+      var nextTheme = isLightTheme() ? 'dark' : 'light';
+      if (nextTheme === 'light') document.documentElement.dataset.theme = 'light';
+      else delete document.documentElement.dataset.theme;
+      try { localStorage.setItem('veer-theme', nextTheme); } catch (error) {}
+      updateThemeToggle();
+      if (ctx) drawField(false);
+    });
+  }
 
   function randomCharacter() {
     return alphabet.charAt(Math.floor(Math.random() * alphabet.length));
@@ -123,6 +150,10 @@
   }
 
   function drawField(change) {
+    var styles = window.getComputedStyle(document.documentElement);
+    var fieldRgb = styles.getPropertyValue('--field-rgb').trim() || '72, 111, 78';
+    var alphaMin = Number(styles.getPropertyValue('--field-alpha-min')) || .045;
+    var alphaRange = Number(styles.getPropertyValue('--field-alpha-range')) || .045;
     ctx.clearRect(0, 0, width, height);
     ctx.font = '400 10px ui-monospace, SFMono-Regular, Consolas, monospace';
     ctx.textAlign = 'center';
@@ -132,8 +163,8 @@
       if (change && Math.random() < .022) cell.character = randomCharacter();
       var column = index % columns;
       var row = Math.floor(index / columns);
-      var alpha = .045 + cell.tone * .045;
-      ctx.fillStyle = 'rgba(72, 111, 78,' + alpha + ')';
+      var alpha = alphaMin + cell.tone * alphaRange;
+      ctx.fillStyle = 'rgba(' + fieldRgb + ',' + alpha + ')';
       ctx.fillText(cell.character, column * cellWidth + cellWidth * .5, row * cellHeight + cellHeight * .5);
     });
   }
