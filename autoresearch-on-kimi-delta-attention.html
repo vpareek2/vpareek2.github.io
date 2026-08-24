@@ -29,8 +29,442 @@
         <p class="label" data-matrix data-delay="800">WRITING / 01</p>
         <h1 id="post-title" data-matrix data-delay="1000">Autoresearch on Kimi Delta Attention</h1>
         <p class="post-dek" data-matrix data-delay="1200">What a closed-loop AI optimization process looks like in practice.</p>
-        <p class="post-status" data-matrix data-delay="1400">IN PROGRESS</p>
       </header>
+
+      <section class="campaign-figure" aria-labelledby="campaign-title">
+        <div class="campaign-figure-heading">
+          <div>
+            <p class="label">EXACT TRAINING THROUGHPUT</p>
+            <h2 id="campaign-title">From 833 to 44,942 tokens/s</h2>
+          </div>
+          <div class="campaign-legend" aria-label="Chart legend">
+            <span><i class="legend-dot legend-dot-kept"></i>KEPT</span>
+            <span><i class="legend-dot legend-dot-discarded"></i>DISCARDED</span>
+          </div>
+        </div>
+
+        <div class="campaign-layout">
+          <div class="campaign-chart" data-kda-chart>
+            <svg role="img" aria-labelledby="campaign-title campaign-description"></svg>
+            <div class="campaign-tooltip" role="tooltip" hidden></div>
+          </div>
+
+          <aside class="campaign-rail" aria-label="Complete experiment log">
+            <p class="campaign-rail-heading">EXPERIMENT LOG / 86</p>
+            <div class="campaign-rail-list"></div>
+          </aside>
+        </div>
+
+        <p class="campaign-note" id="campaign-description">
+          Every dot is a measured trainer candidate and every run appears in the log. Six brighter milestones trace the retained story; select any point to jump to its entry. Historical runs span several matched measurement blocks. The final point is a fresh three-run confirmation of the retained exact source.
+        </p>
+      </section>
+
+      <section class="post-body" aria-labelledby="opening-title">
+        <h2 id="opening-title">A one-day experiment</h2>
+
+        <p>
+          Over 24 hours, an autoresearch loop improved the training throughput of a six-layer Kimi Delta Attention model on an NVIDIA GB10 from <strong>833</strong> to <strong>44,942 tokens per second</strong>. The final implementation narrowly exceeded a pinned baseline from <a href="https://github.com/fla-org/flash-linear-attention">FLA, the Flash Linear Attention library</a>, which reached 43,937 tokens per second on the same workload and device. Its strongest observed run median was 45,058 tokens per second.
+        </p>
+
+        <p>
+          This is a deliberately narrow result. The model architecture, sequence length, precision, optimizer, data order, and KDA equations were held fixed. The loop was allowed to change only how the computation was implemented. Faster results that altered the mechanism, weakened its gradients, or failed the numerical checks did not count.
+        </p>
+
+        <p>The more interesting question is how the implementation got there.</p>
+
+        <h3>Why optimize KDA?</h3>
+
+        <p>
+          I originally encountered KDA while doing architecture research. KDA is an expressive linear-attention mechanism, but my initial training path on the DGX Spark was too slow for useful experimentation. An update took nearly 40 seconds. At that speed, the cost of evaluating an architectural idea was dominated by the implementation rather than the idea itself.
+        </p>
+
+        <p>
+          The practical solution was FLA. It provides training-ready implementations of linear-attention mechanisms and was the fastest complete KDA training path I could run on the device. I could have used it and continued with the architecture work.
+        </p>
+
+        <section class="kda-explainer" aria-labelledby="kda-explainer-title" data-kda-explainer>
+          <div class="kda-explainer-heading">
+            <div>
+              <p class="label">THE MECHANISM</p>
+              <h3 id="kda-explainer-title">KDA in one minute</h3>
+            </div>
+            <p>
+              Standard attention keeps every earlier key and value available. KDA instead compresses the past into a fixed-size matrix—a form of working memory. Each token reads what that memory currently predicts and writes only the correction. A learned gate lets different memory channels forget at different rates. The result is a memory that continually edits itself as the model reads.
+            </p>
+          </div>
+
+          <div class="kda-stage" aria-live="polite">
+            <div class="kda-stage-side kda-stage-input">
+              <p class="kda-stage-kicker">INCOMING TOKEN</p>
+              <div class="kda-token-card">
+                <span class="kda-token-kind">KEY</span>
+                <strong data-kda-key>ALPHA</strong>
+                <span class="kda-token-arrow">→</span>
+                <span class="kda-token-kind">VALUE</span>
+                <strong data-kda-value>4</strong>
+              </div>
+              <p class="kda-side-note" data-kda-input-note>Turn the token into an address and some content.</p>
+            </div>
+
+            <div class="kda-memory" aria-label="A fixed-size matrix representing KDA memory">
+              <div class="kda-memory-label">
+                <span>FIXED-SIZE MEMORY</span>
+                <span data-kda-memory-state>WRITE</span>
+              </div>
+              <div class="kda-memory-grid" aria-hidden="true"></div>
+              <div class="kda-memory-action" data-kda-action>ADD ASSOCIATION</div>
+            </div>
+
+            <div class="kda-stage-side kda-stage-output">
+              <p class="kda-stage-kicker">MEMORY OPERATION</p>
+              <div class="kda-operation" data-kda-operation>
+                <span>address</span>
+                <strong>ALPHA</strong>
+                <span>now points toward</span>
+                <strong>4</strong>
+              </div>
+              <p class="kda-side-note" data-kda-output-note>The state grows no larger when the sequence does.</p>
+            </div>
+          </div>
+
+          <div class="kda-step-controls" role="group" aria-label="KDA memory update stages">
+            <button type="button" aria-pressed="true" data-kda-step="0"><span>01</span> WRITE</button>
+            <button type="button" aria-pressed="false" data-kda-step="1"><span>02</span> COLLIDE</button>
+            <button type="button" aria-pressed="false" data-kda-step="2"><span>03</span> CORRECT</button>
+            <button type="button" aria-pressed="false" data-kda-step="3"><span>04</span> FORGET</button>
+          </div>
+
+          <p class="kda-stage-caption" data-kda-caption>
+            Unlike standard attention, KDA does not retain every earlier key and value. It continually updates one compact working memory.
+          </p>
+
+          <div class="kda-recurrence" aria-label="Sequential dependency between tokens and memory states">
+            <div class="kda-recurrence-flow" aria-hidden="true">
+              <span>TOKEN 1</span><i>→</i><span>STATE 1</span><i>→</i><span>TOKEN 2</span><i>→</i><span>STATE 2</span><i>→</i><span>…</span>
+            </div>
+            <p><strong>THE SYSTEMS PROBLEM</strong> Each state appears to depend on the one before it—the opposite of the wide parallel work GPUs prefer.</p>
+          </div>
+
+          <p class="kda-reading">
+            For the full derivation: <a href="https://sustcsonglin.github.io/blog/2024/deltanet-1/">DeltaNet I: the model</a>, <a href="https://sustcsonglin.github.io/blog/2024/deltanet-2/">DeltaNet II: the algorithm</a>, and the <a href="https://arxiv.org/abs/2510.26692">Kimi Linear paper</a>.
+          </p>
+        </section>
+
+        <p>
+          The recurrence is easy to express in PyTorch, but efficient training requires parallelizing it across tokens without changing the forward computation or its gradients. That gap—from a correct implementation to a hardware-efficient one—became the target of the experiment.
+        </p>
+
+        <p>
+          The algorithmic escape hatch was already known. <a href="https://sustcsonglin.github.io/blog/2024/deltanet-2/">DeltaNet’s chunkwise formulation</a> groups tokens into blocks: memory still moves sequentially between blocks, while most of the work inside each block becomes parallel matrix multiplication. The Kimi Linear paper derives the corresponding chunkwise form for KDA.
+        </p>
+
+        <p>
+          This project did not invent that algorithm. Kimi Linear supplied the mechanism and formulation, while FLA supplied a strong implementation and the performance target. The experiment was whether an agent could turn those ideas into an exact, hardware-specific training path for the GB10—and optimize it far enough to compete.
+        </p>
+      </section>
+
+      <section class="post-body post-section" aria-labelledby="loop-title">
+        <h2 id="loop-title">Designing the autoresearch loop</h2>
+
+        <p>
+          Autoresearch was not a single prompt. It was a closed experimental system: the model proposed and implemented changes, frozen gates determined what counted, and a durable record carried evidence from one attempt to the next.
+        </p>
+
+        <p>
+          The agent owned the fast inner loop. I owned the objective and periodically reopened the global profile when a locally productive search stopped attacking the largest remaining bottleneck.
+        </p>
+
+        <div class="research-system-scroll" data-rs-scroll>
+        <figure class="research-system" data-research-system aria-labelledby="research-system-title">
+          <figcaption class="research-system-heading">
+            <div>
+              <p class="label">THE RESEARCH SYSTEM</p>
+              <h3 id="research-system-title">One experiment at a time</h3>
+            </div>
+            <p>Codex + Prime-Agent · GPT-5.6-Terra / high</p>
+          </figcaption>
+
+          <div class="rs-stepper" data-rs-stepper>
+            <div class="rs-track" data-rs-track>
+              <svg class="rs-track-lines" aria-hidden="true">
+                <defs>
+                  <marker id="rs-stepper-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+                    <path d="M0 0 L10 5 L0 10 Z"></path>
+                  </marker>
+                </defs>
+                <path class="rs-track-glow" data-rs-track-glow></path>
+                <path class="rs-track-path" data-rs-track-path marker-end="url(#rs-stepper-arrow)"></path>
+                <path class="rs-track-invalid-path" data-rs-invalid-path></path>
+                <text class="rs-track-invalid-label" data-rs-invalid-label>FAIL → INVALID</text>
+                <circle class="rs-track-pulse" data-rs-pulse r="5"></circle>
+              </svg>
+
+              <button class="rs-step rs-step-profile" type="button" data-rs-node="profile" aria-label="Step 1: Profile">
+                <span>01</span><strong>Profile</strong>
+              </button>
+              <button class="rs-step rs-step-hypothesis" type="button" data-rs-node="hypothesis" aria-label="Step 2: Hypothesize">
+                <span>02</span><strong>Hypothesize</strong>
+              </button>
+              <button class="rs-step rs-step-patch" type="button" data-rs-node="patch" aria-label="Step 3: Implement">
+                <span>03</span><strong>Implement</strong>
+              </button>
+              <button class="rs-step rs-step-exactness" type="button" data-rs-node="exactness" aria-label="Step 4: Verify">
+                <span>04</span><strong>Verify</strong>
+              </button>
+              <button class="rs-step rs-step-benchmark" type="button" data-rs-node="benchmark" aria-label="Step 5: Benchmark">
+                <span>05</span><strong>Benchmark</strong>
+              </button>
+              <button class="rs-step rs-step-decision" type="button" data-rs-node="decision" aria-label="Step 6: Keep or revert">
+                <span>06</span><strong>Keep / revert</strong>
+              </button>
+
+              <div class="rs-center" aria-live="polite">
+                <span data-rs-meta>AUTONOMOUS ATTEMPT / STEP 01</span>
+                <h4 data-rs-title>Read the global profile</h4>
+                <p data-rs-copy>Start from measured end-to-end cost and choose one bottleneck large enough to matter.</p>
+              </div>
+
+              <p class="rs-stepper-hint">SCROLL OR SELECT A STAGE</p>
+            </div>
+
+            <p class="rs-contract"><span>FROZEN OUTSIDE THE LOOP</span> Exact KDA · full gradients · matched workload · independent oracle</p>
+          </div>
+        </figure>
+        </div>
+
+        <p class="research-system-afterword">
+          Codex and Prime-Agent supplied the execution harness, while <code>/goal</code>, the exactness gates, the matched benchmark, and the append-only ledger made the work recoverable and auditable. FLA remained a performance comparator; an independent PyTorch path was the numerical reference.
+        </p>
+
+        <p>
+          This division of labor held throughout the campaign: the agent was strongest at executing and evaluating concrete experiments. I was most useful when deciding whether it was still optimizing the right problem.
+        </p>
+      </section>
+
+      <section class="post-body post-section optimization-section" aria-labelledby="optimization-title">
+        <p class="label">THE OPTIMIZATION TRACE</p>
+        <h2 id="optimization-title">Reading the campaign as logs</h2>
+
+        <p>
+          The final kernel was not the product of one uninterrupted idea. It emerged from hundreds of profile, correctness, and benchmark events: some cumulative, many negative, and a few large enough to change the direction of the search.
+        </p>
+
+        <p>
+          The trace below condenses that record. Attempt identifiers and measurements come from the campaign ledger; the narration is shortened for readability. Rejected and out-of-contract results remain visible because they were part of deciding what the headline could honestly mean.
+        </p>
+
+        <figure class="optimization-log" data-optimization-log aria-labelledby="optimization-log-title">
+          <figcaption class="optimization-log-heading">
+            <div>
+              <span id="optimization-log-title">CONDENSED CAMPAIGN TRACE</span>
+              <small>GB10 / 24 HOURS / EXACT TRAINING</small>
+            </div>
+            <div class="optimization-log-controls">
+              <span data-log-state>READY</span>
+              <label class="optimization-log-speed">SPEED
+                <select data-log-speed aria-label="Playback speed">
+                  <option value="0.5">0.5×</option>
+                  <option value="1" selected>1×</option>
+                  <option value="2">2×</option>
+                  <option value="4">4×</option>
+                </select>
+              </label>
+              <button type="button" data-log-toggle>PAUSE</button>
+              <button type="button" data-log-all>SHOW ALL</button>
+            </div>
+          </figcaption>
+
+          <div class="optimization-log-screen" data-log-screen tabindex="0" aria-label="Scrollable optimization campaign transcript">
+            <div class="optimization-log-readout" aria-hidden="true">
+              <span data-log-progress>TRACE 00 / 39</span>
+              <span data-log-phase>INITIALIZING</span>
+              <span data-log-best>BEST —</span>
+            </div>
+
+            <ol class="optimization-log-lines" data-log-lines>
+              <li class="optimization-log-entry log-command" data-log-phase="INITIALIZE">
+                <span class="log-prefix">$</span><span>kda-autoresearch --device GB10 --budget 24h</span>
+              </li>
+              <li class="optimization-log-entry log-contract" data-log-phase="INITIALIZE">
+                <span class="log-prefix">[CONTRACT]</span><span>exact KDA · full gradients · matched six-layer trainer</span>
+              </li>
+              <li class="optimization-log-entry log-muted" data-log-phase="INITIALIZE">
+                <span class="log-prefix">[TRACE]</span><span>366 ledger events · 86 measured trainer candidates</span>
+              </li>
+
+              <li class="optimization-log-entry log-phase" data-log-phase="PHASE 01 / 06">
+                <span>—— PHASE 01 / ESTABLISH THE BASELINE ——</span>
+              </li>
+              <li class="optimization-log-entry log-milestone" data-log-phase="PHASE 01 / 06" data-log-best="833">
+                <div class="log-milestone-title"><span>[BASELINE]</span><strong>Initial eager implementation</strong></div>
+                <div class="log-milestone-detail">
+                  <span><i>[PROFILE]</i> Python recurrence: 38.2 seconds per training update</span>
+                  <span><i>[REFERENCE]</i> Full KDA forward and backward in eager PyTorch</span>
+                  <span><i>[BENCH]</i> <b>833 TOKENS/S</b></span>
+                </div>
+              </li>
+              <li class="optimization-log-entry log-muted" data-log-phase="PHASE 01 / 06">
+                <span class="log-prefix">[AGENT]</span><span>continued improving the Python path; a CUDA rewrite remained deferred</span>
+              </li>
+              <li class="optimization-log-entry log-human" data-log-phase="PHASE 01 / 06">
+                <span class="log-prefix">[HUMAN REDIRECT]</span><span>Stop extending the Python path. Own the complete CUDA training implementation.</span>
+              </li>
+
+              <li class="optimization-log-entry log-phase" data-log-phase="PHASE 02 / 06">
+                <span>—— PHASE 02 / MOVE THE PATH INTO CUDA ——</span>
+              </li>
+              <li class="optimization-log-entry log-expandable log-keep" data-log-phase="PHASE 02 / 06" data-log-best="1978">
+                <button type="button" aria-expanded="false"><span class="log-prefix">[KEEP 014]</span><span>Parallel backward history</span><b>1,978 TOKENS/S</b></button>
+                <p>Backward state-history work was distributed instead of replayed serially.</p>
+              </li>
+              <li class="optimization-log-entry log-expandable log-keep" data-log-phase="PHASE 02 / 06" data-log-best="2866">
+                <button type="button" aria-expanded="false"><span class="log-prefix">[KEEP 015]</span><span>Parallel forward history</span><b>2,866 TOKENS/S</b></button>
+                <p>The corresponding forward history moved into the project-owned parallel path.</p>
+              </li>
+              <li class="optimization-log-entry log-expandable log-keep" data-log-phase="PHASE 02 / 06" data-log-best="6689">
+                <button type="button" aria-expanded="false"><span class="log-prefix">[KEEP 018]</span><span>Value-tiled reverse</span><b>6,689 TOKENS/S</b></button>
+                <p>The reverse recurrence was split across value tiles to expose more independent GPU work.</p>
+              </li>
+              <li class="optimization-log-entry log-milestone" data-log-phase="PHASE 02 / 06" data-log-best="7394">
+                <div class="log-milestone-title"><span>[MILESTONE 019]</span><strong>First practical project CUDA baseline</strong></div>
+                <div class="log-milestone-detail">
+                  <span><i>[BOTTLENECK]</i> Python dispatch and serial history dominated the update</span>
+                  <span><i>[CHANGE]</i> Complete project-owned CUDA forward and backward</span>
+                  <span><i>[VERIFY]</i> Independent gradients · runtime ownership · no fallback</span>
+                  <span><i>[BENCH]</i> 833 → <b>7,394 TOKENS/S</b></span>
+                </div>
+              </li>
+
+              <li class="optimization-log-entry log-phase" data-log-phase="PHASE 03 / 06">
+                <span>—— PHASE 03 / PARALLELIZE THE RECURRENCE ——</span>
+              </li>
+              <li class="optimization-log-entry log-expandable log-keep" data-log-phase="PHASE 03 / 06" data-log-best="10957">
+                <button type="button" aria-expanded="false"><span class="log-prefix">[KEEP 023]</span><span>Bounded convolution dependencies</span><b>10,957 TOKENS/S</b></button>
+                <p>Dependency structure was rewritten so chunk-local work could proceed in parallel.</p>
+              </li>
+              <li class="optimization-log-entry log-expandable log-keep" data-log-phase="PHASE 03 / 06" data-log-best="21847">
+                <button type="button" aria-expanded="false"><span class="log-prefix">[KEEP 036]</span><span>Row-parallel pair VJP</span><b>21,847 TOKENS/S</b></button>
+                <p>Independent rows of the pairwise vector-Jacobian product received separate owners.</p>
+              </li>
+              <li class="optimization-log-entry log-expandable log-reject" data-log-phase="PHASE 03 / 06">
+                <button type="button" aria-expanded="false"><span class="log-prefix">[REJECT 056]</span><span>Hybrid WMMA scan</span><b>BELOW GATE</b></button>
+                <p>A partial tensor-core conversion was correct, but its measured gain was too small to advance.</p>
+              </li>
+              <li class="optimization-log-entry log-milestone" data-log-phase="PHASE 03 / 06" data-log-best="28325">
+                <div class="log-milestone-title"><span>[MILESTONE 065]</span><strong>Tensor-core recurrence</strong></div>
+                <div class="log-milestone-detail">
+                  <span><i>[BOTTLENECK]</i> Recurrent scans and pair transforms remained on the critical path</span>
+                  <span><i>[CHANGE]</i> Chunkwise transforms plus a unified forward/backward WMMA scan</span>
+                  <span><i>[VERIFY]</i> Random-upstream gradients · production-shape gate</span>
+                  <span><i>[RUNNING BEST]</i> 7,394 → <b>28,325 TOKENS/S</b></span>
+                </div>
+              </li>
+
+              <li class="optimization-log-entry log-phase" data-log-phase="PHASE 04 / 06">
+                <span>—— PHASE 04 / FLATTEN THE BACKWARD PASS ——</span>
+              </li>
+              <li class="optimization-log-entry log-expandable log-keep" data-log-phase="PHASE 04 / 06" data-log-best="31747">
+                <button type="button" aria-expanded="false"><span class="log-prefix">[KEEP 084]</span><span>Build-pair WMMA</span><b>31,747 TOKENS/S</b></button>
+                <p>Pair construction and its tensor-core consumers were brought into one retained path.</p>
+              </li>
+              <li class="optimization-log-entry log-expandable log-reject" data-log-phase="PHASE 04 / 06">
+                <button type="button" aria-expanded="false"><span class="log-prefix">[REJECT 123]</span><span>BF16 chunk-state history</span><b>29,354 TOKENS/S</b></button>
+                <p>Lower-precision history reduced storage but introduced enough extra work to regress the trainer.</p>
+              </li>
+              <li class="optimization-log-entry log-expandable log-keep" data-log-phase="PHASE 04 / 06" data-log-best="35521">
+                <button type="button" aria-expanded="false"><span class="log-prefix">[KEEP 161]</span><span>Fast math and generic fallback</span><b>35,521 TOKENS/S</b></button>
+                <p>A guarded fast path accelerated the production shape while preserving the exact generic route.</p>
+              </li>
+              <li class="optimization-log-entry log-milestone" data-log-phase="PHASE 04 / 06" data-log-best="36185">
+                <div class="log-milestone-title"><span>[MILESTONE 168]</span><strong>Flattened parallel backward</strong></div>
+                <div class="log-milestone-detail">
+                  <span><i>[BOTTLENECK]</i> Ten independent triangular pair families launched separately</span>
+                  <span><i>[CHANGE]</i> Flatten pair ownership into one broader CUDA grid</span>
+                  <span><i>[PROFILE]</i> Operator launch count: 185 → 167</span>
+                  <span><i>[RUNNING BEST]</i> <b>36,185 TOKENS/S</b></span>
+                </div>
+              </li>
+
+              <li class="optimization-log-entry log-phase" data-log-phase="PHASE 05 / 06">
+                <span>—— PHASE 05 / SHRINK THE DATAFLOW ——</span>
+              </li>
+              <li class="optimization-log-entry log-expandable log-keep" data-log-phase="PHASE 05 / 06" data-log-best="38803">
+                <button type="button" aria-expanded="false"><span class="log-prefix">[KEEP 204]</span><span>Forward group checkpoints</span><b>38,803 TOKENS/S</b></button>
+                <p>Only the group-level state needed by backward remained materialized.</p>
+              </li>
+              <li class="optimization-log-entry log-expandable log-keep" data-log-phase="PHASE 05 / 06" data-log-best="40347">
+                <button type="button" aria-expanded="false"><span class="log-prefix">[KEEP 217]</span><span>Correct retained WY layout</span><b>40,347 TOKENS/S</b></button>
+                <p>Retained factors were laid out for their consumers without changing the WY computation.</p>
+              </li>
+              <li class="optimization-log-entry log-expandable log-keep" data-log-phase="PHASE 05 / 06" data-log-best="42109">
+                <button type="button" aria-expanded="false"><span class="log-prefix">[KEEP 256]</span><span>BF16 forward WY products</span><b>42,109 TOKENS/S</b></button>
+                <p>Selected forward products crossed the producer-consumer boundary directly in BF16.</p>
+              </li>
+              <li class="optimization-log-entry log-milestone" data-log-phase="PHASE 05 / 06" data-log-best="42237">
+                <div class="log-milestone-title"><span>[MILESTONE 266]</span><strong>Compact BF16 dataflow</strong></div>
+                <div class="log-milestone-detail">
+                  <span><i>[BOTTLENECK]</i> Large FP32 U/W surfaces were written, packed, and reread</span>
+                  <span><i>[CHANGE]</i> Publish U to compact scratch and W directly to retained storage</span>
+                  <span><i>[VERIFY]</i> Seven random-dO gradients bitwise equal · four sanitizers clean</span>
+                  <span><i>[DIRECT LEVEL 2]</i> 40,105 → <b>42,237 TOKENS/S</b></span>
+                </div>
+              </li>
+
+              <li class="optimization-log-entry log-phase" data-log-phase="PHASE 06 / 06">
+                <span>—— PHASE 06 / AUDIT THE LAST MILE ——</span>
+              </li>
+              <li class="optimization-log-entry log-expandable log-reject" data-log-phase="PHASE 06 / 06">
+                <button type="button" aria-expanded="false"><span class="log-prefix">[DISCARD 271]</span><span>Forward CUDA Graph</span><b>42,262 TOKENS/S</b></button>
+                <p>A locally positive graph result did not establish a durable retained improvement.</p>
+              </li>
+              <li class="optimization-log-entry log-expandable log-reject" data-log-phase="PHASE 06 / 06">
+                <button type="button" aria-expanded="false"><span class="log-prefix">[REJECT 274]</span><span>Stacked CUDA Graphs</span><b>20,883 TOKENS/S</b></button>
+                <p>Composing individually plausible captures produced a severe end-to-end regression.</p>
+              </li>
+              <li class="optimization-log-entry log-expandable log-keep" data-log-phase="PHASE 06 / 06" data-log-best="43840">
+                <button type="button" aria-expanded="false"><span class="log-prefix">[KEEP 342]</span><span>Group-major retained data</span><b>43,840 TOKENS/S</b></button>
+                <p>Producer layouts were aligned with the backward consumers that reused them.</p>
+              </li>
+              <li class="optimization-log-entry log-expandable log-keep" data-log-phase="PHASE 06 / 06" data-log-best="44542">
+                <button type="button" aria-expanded="false"><span class="log-prefix">[KEEP 345]</span><span>Fused RMSNorm and output gate</span><b>44,542 TOKENS/S</b></button>
+                <p>An exact vertical fusion removed a layer boundary and passed a three-by-three matched trainer comparison.</p>
+              </li>
+              <li class="optimization-log-entry log-outside" data-log-phase="PHASE 06 / 06">
+                <span class="log-prefix">[OUT OF CONTRACT]</span><span>Local-path surrogate exceeded 45.5K by truncating KDA backpropagation</span>
+              </li>
+              <li class="optimization-log-entry log-outside" data-log-phase="PHASE 06 / 06">
+                <span class="log-prefix">[OUT OF CONTRACT]</span><span>Value-only surrogate reached 50,541.5 by omitting trainable gradient paths</span>
+              </li>
+              <li class="optimization-log-entry log-human" data-log-phase="PHASE 06 / 06">
+                <span class="log-prefix">[HUMAN AUDIT]</span><span>A faster number does not count when the computation has changed.</span>
+              </li>
+              <li class="optimization-log-entry log-expandable log-reject" data-log-phase="PHASE 06 / 06">
+                <button type="button" aria-expanded="false"><span class="log-prefix">[NEUTRAL 372]</span><span>Exact BF16 weight cache</span><b>+4 TOKENS/S</b></button>
+                <p>Bitwise exact, but the apparent microbenchmark gain disappeared in the matched trainer.</p>
+              </li>
+              <li class="optimization-log-entry log-expandable log-reject" data-log-phase="PHASE 06 / 06">
+                <button type="button" aria-expanded="false"><span class="log-prefix">[REJECT 373]</span><span>Four-CTA clustered VJP</span><b>+3.85% TIME</b></button>
+                <p>Fewer launches lost to idle cluster residency and barriers; the exact layer became slower.</p>
+              </li>
+
+              <li class="optimization-log-entry log-milestone log-release" data-log-phase="RELEASE" data-log-best="44942">
+                <div class="log-milestone-title"><span>[RELEASE]</span><strong>Exact matched confirmation</strong></div>
+                <div class="log-milestone-detail">
+                  <span><i>[PROJECT RUNS]</i> 45,058 · 44,942 · 44,842 TOKENS/S</span>
+                  <span><i>[FLA RUNS]</i> 43,958 · 43,898 · 43,937 TOKENS/S</span>
+                  <span><i>[CONFIRMED MEDIANS]</i> <b>44,942 vs. 43,937 · +2.287%</b></span>
+                  <span><i>[STRONGEST OBSERVED RUN]</i> 45,058 TOKENS/S</span>
+                </div>
+              </li>
+              <li class="optimization-log-entry log-complete" data-log-phase="COMPLETE">
+                <span class="log-prefix">[COMPLETE]</span><span>exact source retained · evidence saved · claim bounded to this workload and GB10</span>
+              </li>
+            </ol>
+          </div>
+
+        </figure>
+      </section>
     </article>
   </main>
 
@@ -41,5 +475,7 @@
 </div>
 
 <script src="shuffle.js"></script>
+<script src="kda-progress.js"></script>
+<script src="kda-optimization-log.js"></script>
 </body>
 </html>
