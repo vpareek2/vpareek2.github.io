@@ -465,6 +465,34 @@
 
         </figure>
       </section>
+
+      <section class="post-body post-section" aria-labelledby="conclusion-title">
+        <h2 id="conclusion-title">What the experiment showed</h2>
+
+        <p>
+          This is not evidence that an autoresearch agent can replace FLA, CUDA experts, or careful systems work. The result is narrow: one KDA workload, one GB10, and one pinned comparison. On that setup, the final project implementation reached a confirmed median of 44,942 tokens per second, 2.287% above FLA.
+        </p>
+
+        <p>
+          What surprised me was how far the agent could move through the implementation stack. It began with a slow PyTorch reference, constructed a complete CUDA training path, and eventually optimized tensor-core recurrence, backward scheduling, and intermediate dataflow. I understood the mechanism and could follow the CUDA decisions, but I could not have produced this implementation from scratch in 24 hours.
+        </p>
+
+        <p>
+          That did not make the process hands-off. The agent was very effective when given a concrete bottleneck and a reliable way to test its work. It was less reliable at deciding when a productive local search had stopped addressing the global problem. My main contribution was repeatedly auditing its conclusions, reopening the end-to-end profile, and redirecting the search when it became attached to increasingly small improvements.
+        </p>
+
+        <p>
+          The final hours made the importance of that separation especially clear. Several implementations exceeded 45,500—and one exceeded 50,000—only by removing parts of the backward computation. They were interesting experiments, but they were not exact KDA training. Without an independent reference, frozen correctness gates, and a matched benchmark, they could easily have become the headline.
+        </p>
+
+        <p>
+          So I do not think autograd has become unnecessary. In this project, PyTorch autograd remained the numerical reference that made aggressive custom kernels trustworthy. What became less necessary was writing every production training kernel by hand before exploring an architectural idea. With enough understanding to specify the computation, design the evaluation loop, and interrogate the results, an autoresearch agent can close much of that implementation gap.
+        </p>
+
+        <p>
+          The most useful result, then, is not simply that the final kernel edged past FLA. It is that the distance between understanding a mechanism and obtaining a competitive hardware-specific training implementation became much shorter.
+        </p>
+      </section>
     </article>
   </main>
 
