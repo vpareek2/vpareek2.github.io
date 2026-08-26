@@ -1573,13 +1573,6 @@ footer p { margin: 0; }
   text-align: right;
 }
 
-.post-body .training-traces {
-  margin-top: 2.25rem;
-  color: var(--muted);
-  font-size: .56rem;
-  letter-spacing: .06em;
-}
-
 .kda-explainer {
   width: min(78vw, 64rem);
   margin: var(--post-component-gap) 0;
