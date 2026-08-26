@@ -572,6 +572,7 @@ footer p { margin: 0; }
   color: var(--muted);
   font-size: .62rem;
   letter-spacing: .07em;
+  animation: campaign-figure-in 720ms ease 1.2s both;
 }
 
 .post-source-links span {
