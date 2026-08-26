@@ -7,10 +7,10 @@
 <meta content="Veer Pareek" name="author">
 <title>Veer Pareek</title>
 <script>(function(){document.documentElement.classList.add('has-js');try{if(localStorage.getItem('veer-theme')==='light')document.documentElement.dataset.theme='light';}catch(e){}})();</script>
-<link href="index.css" rel="stylesheet">
+<link href="index.css?v=20260825-4" rel="stylesheet">
 </head>
 
-<body>
+<body class="home-page">
 <canvas id="character-field" aria-hidden="true"></canvas>
 
 <div class="matrix-content">
@@ -54,23 +54,40 @@
       <section class="writing" id="writing" aria-labelledby="writing-title">
       <h2 class="label" id="writing-title" data-matrix data-delay="2250">WRITING</h2>
 
-      <article>
-        <p class="index" data-matrix data-delay="2350">01</p>
-        <div>
-          <h3><a href="autoresearch-on-kimi-delta-attention.html" data-matrix data-delay="2450" data-repeat>Autoresearch on Kimi Delta Attention</a></h3>
-          <p class="muted" data-matrix data-delay="2550">What a closed-loop AI optimization process looks like in practice.</p>
-        </div>
-        <p class="status" data-matrix data-delay="2650">IN PROGRESS</p>
-      </article>
+      <div class="writing-card-grid">
+        <article class="writing-card writing-card-kda is-visible">
+          <a class="writing-card-link" href="autoresearch-on-kimi-delta-attention.html" aria-label="Read Autoresearch on Kimi Delta Attention">
+            <div class="writing-card-art" aria-hidden="true">
+              <picture class="memory-field-art">
+                <source media="(prefers-reduced-motion: reduce)" srcset="assets/memory-sphere/memory-field-poster.png">
+                <img src="assets/memory-sphere/memory-field.webp" alt="" width="600" height="500">
+              </picture>
+            </div>
+            <div class="writing-card-copy">
+              <div class="writing-card-meta">
+                <p class="index" data-matrix data-delay="2350">01</p>
+                <p class="status" data-matrix data-delay="2450">AUGUST 24, 2026</p>
+              </div>
+              <h3 data-matrix data-delay="2550" data-repeat>Autoresearch on Kimi Delta Attention</h3>
+              <p class="muted" data-matrix data-delay="2650">What a closed-loop AI optimization process looks like in practice.</p>
+            </div>
+          </a>
+        </article>
 
-      <article>
-        <p class="index" data-matrix data-delay="2750">02</p>
-        <div>
-          <h3 data-matrix data-delay="2850" data-repeat>What remains of Common Crawl?</h3>
-          <p class="muted" data-matrix data-delay="2950">Tracing raw web data through filtering to find how many genuinely useful tokens survive.</p>
-        </div>
-        <p class="status" data-matrix data-delay="3050">IN PROGRESS</p>
-      </article>
+        <article class="writing-card writing-card-crawl" aria-label="What remains of Common Crawl? In progress">
+          <div class="writing-card-art" aria-hidden="true">
+            <canvas data-writing-art="crawl"></canvas>
+          </div>
+          <div class="writing-card-copy">
+            <div class="writing-card-meta">
+              <p class="index" data-matrix data-delay="2750">02</p>
+              <p class="status" data-matrix data-delay="2850">IN PROGRESS</p>
+            </div>
+            <h3 data-matrix data-delay="2950" data-repeat>What remains of Common Crawl?</h3>
+            <p class="muted" data-matrix data-delay="3050">Tracing raw web data through filtering to find how many genuinely useful tokens survive.</p>
+          </div>
+        </article>
+      </div>
       </section>
     </div>
   </main>
@@ -85,5 +102,6 @@
 </div>
 
 <script src="shuffle.js"></script>
+<script src="writing-cards.js?v=20260825-2"></script>
 </body>
 </html>

@@ -353,7 +353,7 @@
       card.className = 'campaign-rail-card campaign-rail-card-' + point.status;
       card.dataset.pointId = point.id;
       card.style.animationDelay = (0.9 + Math.sqrt(point.x / 366) * 1.7) + 's';
-      meta.textContent = (point.id === 'release-confirmation' ? 'CONFIRMATION' : 'ATTEMPT ' + String(point.x).padStart(3, '0')) +
+      meta.textContent = (point.id === 'release-confirmation' ? 'CONFIRMATION' : 'ATTEMPT ' + point.x) +
         ' / ' + formatMilestoneTps(point) + ' TOKENS/S';
       title.textContent = point.label;
       detail.textContent = pointDetail(point);
@@ -396,12 +396,12 @@
   var activeScrollStop = -1;
 
   var details = {
-    profile: ['AUTONOMOUS ATTEMPT / STEP 01', 'Read the global profile', 'Start from measured end-to-end cost and choose one bottleneck large enough to matter.'],
-    hypothesis: ['AUTONOMOUS ATTEMPT / STEP 02', 'Name one mechanism', 'Explain the bottleneck and predict a measurable effect before changing the implementation.'],
-    patch: ['AUTONOMOUS ATTEMPT / STEP 03', 'Build one candidate', 'Change one primary scheduling, layout, fusion, or dataflow idea in Python or CUDA.'],
-    exactness: ['PROTECTED GATE / STEP 04', 'Try to falsify it', 'Check the forward pass and random-upstream gradients against an independent PyTorch oracle.'],
-    benchmark: ['PROTECTED GATE / STEP 05', 'Measure the real workload', 'Only exact candidates reach the matched, production-shaped six-layer trainer benchmark.'],
-    decision: ['AUTONOMOUS ATTEMPT / STEP 06', 'Keep, revert, and record', 'A material exact win becomes the baseline. Every other outcome still enters the experiment ledger.']
+    profile: ['AUTONOMOUS ATTEMPT / STEP 1', 'Read the global profile', 'Start from measured end-to-end cost and choose one bottleneck large enough to matter.'],
+    hypothesis: ['AUTONOMOUS ATTEMPT / STEP 2', 'Name one mechanism', 'Explain the bottleneck and predict a measurable effect before changing the implementation.'],
+    patch: ['AUTONOMOUS ATTEMPT / STEP 3', 'Build one candidate', 'Change one primary scheduling, layout, fusion, or dataflow idea in Python or CUDA.'],
+    exactness: ['PROTECTED GATE / STEP 4', 'Try to falsify it', 'Check the forward pass and random-upstream gradients against an independent PyTorch oracle.'],
+    benchmark: ['PROTECTED GATE / STEP 5', 'Measure the real workload', 'Only exact candidates reach the matched, production-shaped six-layer trainer benchmark.'],
+    decision: ['AUTONOMOUS ATTEMPT / STEP 6', 'Keep, revert, and record', 'A material exact win becomes the baseline. Every other outcome still enters the experiment ledger.']
   };
 
   function pointForElement(element) {

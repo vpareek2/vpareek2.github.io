@@ -41,8 +41,8 @@
   }
 
   function updateReadout(entry) {
-    progress.textContent = 'TRACE ' + String(index + 1).padStart(2, '0') + ' / ' + entries.length;
-    if (entry.dataset.logPhase) phase.textContent = entry.dataset.logPhase;
+    progress.textContent = 'TRACE ' + (index + 1) + ' / ' + entries.length;
+    if (entry.dataset.logPhase) phase.textContent = entry.dataset.logPhase.replace(/\b0+(\d)/g, '$1');
     if (entry.dataset.logBest) {
       runningBest = Math.max(runningBest, Number(entry.dataset.logBest));
       best.textContent = 'BEST ' + formatNumber(runningBest) + ' TOKENS/S';
@@ -139,15 +139,15 @@
     userPaused = false;
     offscreenPaused = false;
     screen.scrollTop = 0;
-    progress.textContent = 'TRACE 00 / ' + entries.length;
+    progress.textContent = 'TRACE 0 / ' + entries.length;
     phase.textContent = 'INITIALIZING';
-    best.textContent = 'BEST —';
+    best.textContent = 'BEST PENDING';
     state.textContent = 'READY';
     play();
   }
 
   root.classList.add('is-prepared');
-  progress.textContent = 'TRACE 00 / ' + entries.length;
+  progress.textContent = 'TRACE 0 / ' + entries.length;
   setControls();
 
   root.querySelectorAll('.log-expandable button').forEach(function (button) {

@@ -5,9 +5,9 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
 <meta content="Autoresearch on Kimi Delta Attention by Veer Pareek." name="description">
 <meta content="Veer Pareek" name="author">
-<title>Autoresearch on Kimi Delta Attention — Veer Pareek</title>
+<title>Autoresearch on Kimi Delta Attention | Veer Pareek</title>
 <script>(function(){document.documentElement.classList.add('has-js');try{if(localStorage.getItem('veer-theme')==='light')document.documentElement.dataset.theme='light';}catch(e){}})();</script>
-<link href="index.css" rel="stylesheet">
+<link href="index.css?v=20260825-3" rel="stylesheet">
 </head>
 
 <body class="article-page">
@@ -26,7 +26,7 @@
   <main>
     <article class="post" aria-labelledby="post-title">
       <header class="post-header">
-        <p class="label" data-matrix data-delay="800">WRITING / 01</p>
+        <p class="label" data-matrix data-delay="800">WRITING / 1</p>
         <h1 id="post-title" data-matrix data-delay="1000">Autoresearch on Kimi Delta Attention</h1>
         <p class="post-dek" data-matrix data-delay="1200">What a closed-loop AI optimization process looks like in practice.</p>
       </header>
@@ -64,23 +64,23 @@
         <h2 id="opening-title">A one-day experiment</h2>
 
         <p>
-          Over 24 hours, an autoresearch loop improved the training throughput of a six-layer Kimi Delta Attention model on an NVIDIA GB10 from <strong>833</strong> to <strong>44,942 tokens per second</strong>. The final implementation narrowly exceeded a pinned baseline from <a href="https://github.com/fla-org/flash-linear-attention">FLA, the Flash Linear Attention library</a>, which reached 43,937 tokens per second on the same workload and device. Its strongest observed run median was 45,058 tokens per second.
+          In 24 hours, an autoresearch loop improved the training throughput of a six-layer Kimi Delta Attention (KDA) development model on an NVIDIA GB10 from <strong>833</strong> to <strong>44,942 tokens per second</strong>. The final exact implementation exceeded the 43,937 tokens per second reached by the <a href="https://github.com/fla-org/flash-linear-attention">Flash Linear Attention (FLA) library</a> under the same model, workload, and device configuration.
         </p>
 
         <p>
-          This is a deliberately narrow result. The model architecture, sequence length, precision, optimizer, data order, and KDA equations were held fixed. The loop was allowed to change only how the computation was implemented. Faster results that altered the mechanism, weakened its gradients, or failed the numerical checks did not count.
+          This result is deliberately narrow. The model architecture, sequence length, precision, optimizer, data ordering, and KDA math were held constant. The agent was only allowed to change how that computation was implemented on the hardware.
         </p>
 
-        <p>The more interesting question is how the implementation got there.</p>
+        <p>What interested me was not only the final number, but how the system got there.</p>
 
         <h3>Why optimize KDA?</h3>
 
         <p>
-          I originally encountered KDA while doing architecture research. KDA is an expressive linear-attention mechanism, but my initial training path on the DGX Spark was too slow for useful experimentation. An update took nearly 40 seconds. At that speed, the cost of evaluating an architectural idea was dominated by the implementation rather than the idea itself.
+          I first became interested in KDA when the <a href="https://arxiv.org/abs/2510.26692">Kimi Linear paper</a> was released. A personal architecture project I was working on explored interleaving linear attention with sliding-window attention, and KDA looked like a natural candidate. The project was written in JAX, however, so the PyTorch-oriented kernels released through FLA were not something I could simply drop in.
         </p>
 
         <p>
-          The practical solution was FLA. It provides training-ready implementations of linear-attention mechanisms and was the fastest complete KDA training path I could run on the device. I could have used it and continued with the architecture work.
+          That inconvenience became the experiment: if I fixed one hardware target, one workload, and strict numerical constraints, how far could an autoresearch loop push a correct but impractical implementation in one day?
         </p>
 
         <section class="kda-explainer" aria-labelledby="kda-explainer-title" data-kda-explainer>
@@ -90,7 +90,7 @@
               <h3 id="kda-explainer-title">KDA in one minute</h3>
             </div>
             <p>
-              Standard attention keeps every earlier key and value available. KDA instead compresses the past into a fixed-size matrix—a form of working memory. Each token reads what that memory currently predicts and writes only the correction. A learned gate lets different memory channels forget at different rates. The result is a memory that continually edits itself as the model reads.
+              Standard attention keeps every earlier key and value available. KDA instead compresses the past into a fixed-size matrix, a form of working memory. Each token reads what that memory currently predicts and writes only the correction. A learned gate lets different memory channels forget at different rates. The result is a memory that continually edits itself as the model reads.
             </p>
           </div>
 
@@ -129,10 +129,10 @@
           </div>
 
           <div class="kda-step-controls" role="group" aria-label="KDA memory update stages">
-            <button type="button" aria-pressed="true" data-kda-step="0"><span>01</span> WRITE</button>
-            <button type="button" aria-pressed="false" data-kda-step="1"><span>02</span> COLLIDE</button>
-            <button type="button" aria-pressed="false" data-kda-step="2"><span>03</span> CORRECT</button>
-            <button type="button" aria-pressed="false" data-kda-step="3"><span>04</span> FORGET</button>
+            <button type="button" aria-pressed="true" data-kda-step="0"><span>1</span> WRITE</button>
+            <button type="button" aria-pressed="false" data-kda-step="1"><span>2</span> COLLIDE</button>
+            <button type="button" aria-pressed="false" data-kda-step="2"><span>3</span> CORRECT</button>
+            <button type="button" aria-pressed="false" data-kda-step="3"><span>4</span> FORGET</button>
           </div>
 
           <p class="kda-stage-caption" data-kda-caption>
@@ -143,7 +143,7 @@
             <div class="kda-recurrence-flow" aria-hidden="true">
               <span>TOKEN 1</span><i>→</i><span>STATE 1</span><i>→</i><span>TOKEN 2</span><i>→</i><span>STATE 2</span><i>→</i><span>…</span>
             </div>
-            <p><strong>THE SYSTEMS PROBLEM</strong> Each state appears to depend on the one before it—the opposite of the wide parallel work GPUs prefer.</p>
+            <p><strong>THE SYSTEMS PROBLEM</strong> Each state appears to depend on the one before it, the opposite of the wide parallel work GPUs prefer.</p>
           </div>
 
           <p class="kda-reading">
@@ -152,15 +152,15 @@
         </section>
 
         <p>
-          The recurrence is easy to express in PyTorch, but efficient training requires parallelizing it across tokens without changing the forward computation or its gradients. That gap—from a correct implementation to a hardware-efficient one—became the target of the experiment.
+          The recurrence is easy to express in PyTorch, but efficient training requires parallelizing it across tokens without dropping any part of the forward computation or backward pass. The gap between a correct implementation and a hardware-efficient one was the target of this experiment.
         </p>
 
         <p>
-          The algorithmic escape hatch was already known. <a href="https://sustcsonglin.github.io/blog/2024/deltanet-2/">DeltaNet’s chunkwise formulation</a> groups tokens into blocks: memory still moves sequentially between blocks, while most of the work inside each block becomes parallel matrix multiplication. The Kimi Linear paper derives the corresponding chunkwise form for KDA.
+          The algorithmic escape hatch is already known. <a href="https://sustcsonglin.github.io/blog/2024/deltanet-2/">DeltaNet’s chunkwise formulation</a> groups tokens into blocks: memory still moves sequentially between blocks, while most of the work inside each block becomes parallel matrix multiplication. The Kimi Linear paper derives the corresponding chunkwise form for KDA.
         </p>
 
         <p>
-          This project did not invent that algorithm. Kimi Linear supplied the mechanism and formulation, while FLA supplied a strong implementation and the performance target. The experiment was whether an agent could turn those ideas into an exact, hardware-specific training path for the GB10—and optimize it far enough to compete.
+          This project does not invent that algorithm. Kimi Linear supplied the mechanism and formulation, while FLA supplied the performance target. The experiment was whether an agent could turn those ideas into an exact, hardware-specific training path for the GB10 and optimize it far enough to compete.
         </p>
       </section>
 
@@ -201,26 +201,26 @@
               </svg>
 
               <button class="rs-step rs-step-profile" type="button" data-rs-node="profile" aria-label="Step 1: Profile">
-                <span>01</span><strong>Profile</strong>
+                <span>1</span><strong>Profile</strong>
               </button>
               <button class="rs-step rs-step-hypothesis" type="button" data-rs-node="hypothesis" aria-label="Step 2: Hypothesize">
-                <span>02</span><strong>Hypothesize</strong>
+                <span>2</span><strong>Hypothesize</strong>
               </button>
               <button class="rs-step rs-step-patch" type="button" data-rs-node="patch" aria-label="Step 3: Implement">
-                <span>03</span><strong>Implement</strong>
+                <span>3</span><strong>Implement</strong>
               </button>
               <button class="rs-step rs-step-exactness" type="button" data-rs-node="exactness" aria-label="Step 4: Verify">
-                <span>04</span><strong>Verify</strong>
+                <span>4</span><strong>Verify</strong>
               </button>
               <button class="rs-step rs-step-benchmark" type="button" data-rs-node="benchmark" aria-label="Step 5: Benchmark">
-                <span>05</span><strong>Benchmark</strong>
+                <span>5</span><strong>Benchmark</strong>
               </button>
               <button class="rs-step rs-step-decision" type="button" data-rs-node="decision" aria-label="Step 6: Keep or revert">
-                <span>06</span><strong>Keep / revert</strong>
+                <span>6</span><strong>Keep / revert</strong>
               </button>
 
               <div class="rs-center" aria-live="polite">
-                <span data-rs-meta>AUTONOMOUS ATTEMPT / STEP 01</span>
+                <span data-rs-meta>AUTONOMOUS ATTEMPT / STEP 1</span>
                 <h4 data-rs-title>Read the global profile</h4>
                 <p data-rs-copy>Start from measured end-to-end cost and choose one bottleneck large enough to matter.</p>
               </div>
@@ -234,11 +234,11 @@
         </div>
 
         <p class="research-system-afterword">
-          Codex and Prime-Agent supplied the execution harness, while <code>/goal</code>, the exactness gates, the matched benchmark, and the append-only ledger made the work recoverable and auditable. FLA remained a performance comparator; an independent PyTorch path was the numerical reference.
+          I ran the model through a mix of the Codex and Prime-Agent harnesses, often using <code>/goal</code> to keep the longer objective explicit. The exactness gates, matched benchmark, and append-only ledger made the work recoverable and auditable. FLA remained a performance comparator; an independent PyTorch path was the numerical reference.
         </p>
 
         <p>
-          This division of labor held throughout the campaign: the agent was strongest at executing and evaluating concrete experiments. I was most useful when deciding whether it was still optimizing the right problem.
+          The agent was extremely strong at executing and evaluating a concrete experiment. My highest-leverage role was noticing when a locally productive search had stopped serving the global objective, then forcing the loop back to the end-to-end profile and changing course.
         </p>
       </section>
 
@@ -247,11 +247,11 @@
         <h2 id="optimization-title">Reading the campaign as logs</h2>
 
         <p>
-          The final kernel was not the product of one uninterrupted idea. It emerged from hundreds of profile, correctness, and benchmark events: some cumulative, many negative, and a few large enough to change the direction of the search.
+          The final implementation was not the result of one large breakthrough. It emerged from hundreds of profile, correctness, and benchmark events: some cumulative, many negative, and a few that changed the direction of the search.
         </p>
 
         <p>
-          The trace below condenses that record. Attempt identifiers and measurements come from the campaign ledger; the narration is shortened for readability. Rejected and out-of-contract results remain visible because they were part of deciding what the headline could honestly mean.
+          The logs below condense the record. Attempt identifiers and measurements come from the campaign ledger; the narration is shortened for readability. Rejected and out-of-contract results remain visible because they were part of deciding what the headline could honestly mean.
         </p>
 
         <figure class="optimization-log" data-optimization-log aria-labelledby="optimization-log-title">
@@ -265,8 +265,8 @@
               <label class="optimization-log-speed">SPEED
                 <select data-log-speed aria-label="Playback speed">
                   <option value="0.5">0.5×</option>
-                  <option value="1" selected>1×</option>
-                  <option value="2">2×</option>
+                  <option value="1">1×</option>
+                  <option value="2" selected>2×</option>
                   <option value="4">4×</option>
                 </select>
               </label>
@@ -277,9 +277,9 @@
 
           <div class="optimization-log-screen" data-log-screen tabindex="0" aria-label="Scrollable optimization campaign transcript">
             <div class="optimization-log-readout" aria-hidden="true">
-              <span data-log-progress>TRACE 00 / 39</span>
+              <span data-log-progress>TRACE 0 / 39</span>
               <span data-log-phase>INITIALIZING</span>
-              <span data-log-best>BEST —</span>
+              <span data-log-best>BEST PENDING</span>
             </div>
 
             <ol class="optimization-log-lines" data-log-lines>
@@ -294,7 +294,7 @@
               </li>
 
               <li class="optimization-log-entry log-phase" data-log-phase="PHASE 01 / 06">
-                <span>—— PHASE 01 / ESTABLISH THE BASELINE ——</span>
+                <span>-- PHASE 1 / ESTABLISH THE BASELINE --</span>
               </li>
               <li class="optimization-log-entry log-milestone" data-log-phase="PHASE 01 / 06" data-log-best="833">
                 <div class="log-milestone-title"><span>[BASELINE]</span><strong>Initial eager implementation</strong></div>
@@ -312,22 +312,22 @@
               </li>
 
               <li class="optimization-log-entry log-phase" data-log-phase="PHASE 02 / 06">
-                <span>—— PHASE 02 / MOVE THE PATH INTO CUDA ——</span>
+                <span>-- PHASE 2 / MOVE THE PATH INTO CUDA --</span>
               </li>
               <li class="optimization-log-entry log-expandable log-keep" data-log-phase="PHASE 02 / 06" data-log-best="1978">
-                <button type="button" aria-expanded="false"><span class="log-prefix">[KEEP 014]</span><span>Parallel backward history</span><b>1,978 TOKENS/S</b></button>
+                <button type="button" aria-expanded="false"><span class="log-prefix">[KEEP 14]</span><span>Parallel backward history</span><b>1,978 TOKENS/S</b></button>
                 <p>Backward state-history work was distributed instead of replayed serially.</p>
               </li>
               <li class="optimization-log-entry log-expandable log-keep" data-log-phase="PHASE 02 / 06" data-log-best="2866">
-                <button type="button" aria-expanded="false"><span class="log-prefix">[KEEP 015]</span><span>Parallel forward history</span><b>2,866 TOKENS/S</b></button>
+                <button type="button" aria-expanded="false"><span class="log-prefix">[KEEP 15]</span><span>Parallel forward history</span><b>2,866 TOKENS/S</b></button>
                 <p>The corresponding forward history moved into the project-owned parallel path.</p>
               </li>
               <li class="optimization-log-entry log-expandable log-keep" data-log-phase="PHASE 02 / 06" data-log-best="6689">
-                <button type="button" aria-expanded="false"><span class="log-prefix">[KEEP 018]</span><span>Value-tiled reverse</span><b>6,689 TOKENS/S</b></button>
+                <button type="button" aria-expanded="false"><span class="log-prefix">[KEEP 18]</span><span>Value-tiled reverse</span><b>6,689 TOKENS/S</b></button>
                 <p>The reverse recurrence was split across value tiles to expose more independent GPU work.</p>
               </li>
               <li class="optimization-log-entry log-milestone" data-log-phase="PHASE 02 / 06" data-log-best="7394">
-                <div class="log-milestone-title"><span>[MILESTONE 019]</span><strong>First practical project CUDA baseline</strong></div>
+                <div class="log-milestone-title"><span>[MILESTONE 19]</span><strong>First practical project CUDA baseline</strong></div>
                 <div class="log-milestone-detail">
                   <span><i>[BOTTLENECK]</i> Python dispatch and serial history dominated the update</span>
                   <span><i>[CHANGE]</i> Complete project-owned CUDA forward and backward</span>
@@ -337,22 +337,22 @@
               </li>
 
               <li class="optimization-log-entry log-phase" data-log-phase="PHASE 03 / 06">
-                <span>—— PHASE 03 / PARALLELIZE THE RECURRENCE ——</span>
+                <span>-- PHASE 3 / PARALLELIZE THE RECURRENCE --</span>
               </li>
               <li class="optimization-log-entry log-expandable log-keep" data-log-phase="PHASE 03 / 06" data-log-best="10957">
-                <button type="button" aria-expanded="false"><span class="log-prefix">[KEEP 023]</span><span>Bounded convolution dependencies</span><b>10,957 TOKENS/S</b></button>
+                <button type="button" aria-expanded="false"><span class="log-prefix">[KEEP 23]</span><span>Bounded convolution dependencies</span><b>10,957 TOKENS/S</b></button>
                 <p>Dependency structure was rewritten so chunk-local work could proceed in parallel.</p>
               </li>
               <li class="optimization-log-entry log-expandable log-keep" data-log-phase="PHASE 03 / 06" data-log-best="21847">
-                <button type="button" aria-expanded="false"><span class="log-prefix">[KEEP 036]</span><span>Row-parallel pair VJP</span><b>21,847 TOKENS/S</b></button>
+                <button type="button" aria-expanded="false"><span class="log-prefix">[KEEP 36]</span><span>Row-parallel pair VJP</span><b>21,847 TOKENS/S</b></button>
                 <p>Independent rows of the pairwise vector-Jacobian product received separate owners.</p>
               </li>
               <li class="optimization-log-entry log-expandable log-reject" data-log-phase="PHASE 03 / 06">
-                <button type="button" aria-expanded="false"><span class="log-prefix">[REJECT 056]</span><span>Hybrid WMMA scan</span><b>BELOW GATE</b></button>
+                <button type="button" aria-expanded="false"><span class="log-prefix">[REJECT 56]</span><span>Hybrid WMMA scan</span><b>BELOW GATE</b></button>
                 <p>A partial tensor-core conversion was correct, but its measured gain was too small to advance.</p>
               </li>
               <li class="optimization-log-entry log-milestone" data-log-phase="PHASE 03 / 06" data-log-best="28325">
-                <div class="log-milestone-title"><span>[MILESTONE 065]</span><strong>Tensor-core recurrence</strong></div>
+                <div class="log-milestone-title"><span>[MILESTONE 65]</span><strong>Tensor-core recurrence</strong></div>
                 <div class="log-milestone-detail">
                   <span><i>[BOTTLENECK]</i> Recurrent scans and pair transforms remained on the critical path</span>
                   <span><i>[CHANGE]</i> Chunkwise transforms plus a unified forward/backward WMMA scan</span>
@@ -362,10 +362,10 @@
               </li>
 
               <li class="optimization-log-entry log-phase" data-log-phase="PHASE 04 / 06">
-                <span>—— PHASE 04 / FLATTEN THE BACKWARD PASS ——</span>
+                <span>-- PHASE 4 / FLATTEN THE BACKWARD PASS --</span>
               </li>
               <li class="optimization-log-entry log-expandable log-keep" data-log-phase="PHASE 04 / 06" data-log-best="31747">
-                <button type="button" aria-expanded="false"><span class="log-prefix">[KEEP 084]</span><span>Build-pair WMMA</span><b>31,747 TOKENS/S</b></button>
+                <button type="button" aria-expanded="false"><span class="log-prefix">[KEEP 84]</span><span>Build-pair WMMA</span><b>31,747 TOKENS/S</b></button>
                 <p>Pair construction and its tensor-core consumers were brought into one retained path.</p>
               </li>
               <li class="optimization-log-entry log-expandable log-reject" data-log-phase="PHASE 04 / 06">
@@ -387,7 +387,7 @@
               </li>
 
               <li class="optimization-log-entry log-phase" data-log-phase="PHASE 05 / 06">
-                <span>—— PHASE 05 / SHRINK THE DATAFLOW ——</span>
+                <span>-- PHASE 5 / SHRINK THE DATAFLOW --</span>
               </li>
               <li class="optimization-log-entry log-expandable log-keep" data-log-phase="PHASE 05 / 06" data-log-best="38803">
                 <button type="button" aria-expanded="false"><span class="log-prefix">[KEEP 204]</span><span>Forward group checkpoints</span><b>38,803 TOKENS/S</b></button>
@@ -412,7 +412,7 @@
               </li>
 
               <li class="optimization-log-entry log-phase" data-log-phase="PHASE 06 / 06">
-                <span>—— PHASE 06 / AUDIT THE LAST MILE ——</span>
+                <span>-- PHASE 6 / AUDIT THE LAST MILE --</span>
               </li>
               <li class="optimization-log-entry log-expandable log-reject" data-log-phase="PHASE 06 / 06">
                 <button type="button" aria-expanded="false"><span class="log-prefix">[DISCARD 271]</span><span>Forward CUDA Graph</span><b>42,262 TOKENS/S</b></button>
@@ -466,31 +466,112 @@
         </figure>
       </section>
 
+      <section class="post-body post-section training-section" aria-labelledby="training-title">
+        <p class="label">FIXED-TIME TRAINING</p>
+        <h2 id="training-title">What twenty minutes buys</h2>
+
+        <p>
+          The seven-step benchmark isolates steady-state throughput, but I also wanted a more tangible test: given the same twenty minutes, how many complete training updates would each implementation actually finish?
+        </p>
+
+        <p>
+          I ran three fresh copies of the same six-layer training job, changing only the KDA backend. Each run used two unscored warm-up updates followed by twenty minutes of measured training. Eager PyTorch completed <strong>12 updates</strong>, FLA completed <strong>1,617</strong>, and the project CUDA backend completed <strong>1,641</strong>. That is 24 more updates than FLA, a <strong>1.48% lead</strong>.
+        </p>
+
+        <figure class="training-comparison" data-training-comparison aria-labelledby="training-comparison-title">
+          <figcaption class="training-comparison-heading">
+            <div>
+              <span id="training-comparison-title">20 MINUTES · SAME MODEL · SAME GB10</span>
+              <small>SMOOTHED LOSS × MEASURED TRAINING TIME</small>
+            </div>
+            <span class="training-comparison-key">SHARED SCALES</span>
+          </figcaption>
+
+          <div class="training-chart-grid">
+            <article class="training-run-card training-run-eager" data-training-run="eager">
+              <header>
+                <div>
+                  <span>1 / EAGER PYTORCH</span>
+                  <strong>12 updates</strong>
+                </div>
+                <b>321 TOKENS/S</b>
+              </header>
+              <div class="training-chart-wrap">
+                <svg role="img" aria-label="Eager PyTorch smoothed loss over twenty minutes"></svg>
+                <div class="training-chart-tooltip" hidden></div>
+              </div>
+              <footer><span>393,216 TOKENS</span><span>FINAL LOSS <b>9.092</b></span></footer>
+            </article>
+
+            <article class="training-run-card training-run-fla" data-training-run="fla">
+              <header>
+                <div>
+                  <span>2 / FLA</span>
+                  <strong>1,617 updates</strong>
+                </div>
+                <b>44,143 TOKENS/S</b>
+              </header>
+              <div class="training-chart-wrap">
+                <svg role="img" aria-label="FLA smoothed loss over twenty minutes"></svg>
+                <div class="training-chart-tooltip" hidden></div>
+              </div>
+              <footer><span>52,985,856 TOKENS</span><span>FINAL LOSS <b>3.850</b></span></footer>
+            </article>
+
+            <article class="training-run-card training-run-project" data-training-run="project">
+              <div class="training-run-badge">+24 UPDATES · +1.48%</div>
+              <header>
+                <div>
+                  <span>3 / PROJECT CUDA</span>
+                  <strong>1,641 updates</strong>
+                </div>
+                <b>44,783 TOKENS/S</b>
+              </header>
+              <div class="training-chart-wrap">
+                <svg role="img" aria-label="Project CUDA smoothed loss over twenty minutes"></svg>
+                <div class="training-chart-tooltip" hidden></div>
+              </div>
+              <footer><span>53,772,288 TOKENS</span><span>FINAL LOSS <b>3.811</b></span></footer>
+            </article>
+          </div>
+
+          <p class="training-axis-label">MEASURED TRAINING TIME →</p>
+        </figure>
+
+        <p>
+          The project run also ended with the lowest displayed loss. I treat that only as a consistency check, not as a quality result: this was one short seed, the project completed 24 additional updates, and the remaining difference is not separable from ordinary BF16 and reduction-order effects without repeated runs. The defensible win is simpler: it completed the most exact training work under the fixed time budget. Neither optimized run fell back to another backend. Spot checks showed no active NVIDIA slowdown flags, although this direct runner did not capture continuous thermal telemetry.
+        </p>
+
+        <p class="training-traces">
+          FULL TRACES · <a href="https://wandb.ai/veerpareek12/nanochat/runs/zxbrirrf">EAGER PYTORCH</a> · <a href="https://wandb.ai/veerpareek12/nanochat/runs/5k9ebdl5">FLA</a> · <a href="https://wandb.ai/veerpareek12/nanochat/runs/cn0gwiy4">PROJECT CUDA</a>
+        </p>
+      </section>
+
       <section class="post-body post-section" aria-labelledby="conclusion-title">
         <h2 id="conclusion-title">What the experiment showed</h2>
 
         <p>
-          This is not evidence that an autoresearch agent can replace FLA, CUDA experts, or careful systems work. The result is narrow: one KDA workload, one GB10, and one pinned comparison. On that setup, the final project implementation reached a confirmed median of 44,942 tokens per second, 2.287% above FLA.
+          This experiment is not evidence that an autoresearch loop can replace a library like FLA, CUDA experts, or diligent systems work. The result is purposefully narrow: one algorithm, one chip, and one pinned comparison. On that setup, after 24 hours of optimization, the project implementation reached a confirmed median of 44,942 tokens per second, 2.287% above FLA. It does raise a more interesting question: how should future optimization systems divide the work between human judgment and agent execution?
         </p>
 
         <p>
-          What surprised me was how far the agent could move through the implementation stack. It began with a slow PyTorch reference, constructed a complete CUDA training path, and eventually optimized tensor-core recurrence, backward scheduling, and intermediate dataflow. I understood the mechanism and could follow the CUDA decisions, but I could not have produced this implementation from scratch in 24 hours.
+          My kernel-development background is limited. I took <a href="https://ece.illinois.edu/academics/courses/ece408-120238">ECE 408: Applied Parallel Programming</a> at UIUC and have worked through some <a href="https://github.com/gpu-mode">GPU MODE</a> lectures, which gave me enough context to understand the mechanism and audit a technical discussion. I could not have written this implementation from memory. Doing it conventionally would have taken me weeks, assuming I got there at all.
         </p>
 
         <p>
-          That did not make the process hands-off. The agent was very effective when given a concrete bottleneck and a reliable way to test its work. It was less reliable at deciding when a productive local search had stopped addressing the global problem. My main contribution was repeatedly auditing its conclusions, reopening the end-to-end profile, and redirecting the search when it became attached to increasingly small improvements.
+          That does not mean the experiment was hands-off. The agent was highly effective when given a concrete bottleneck and a reliable way to test its work. It was less reliable at deciding when a productive local search had stopped addressing the global goal. My role was to audit its conclusions, reopen the end-to-end profile, and redirect the search when it became attached to increasingly small improvements.
         </p>
 
         <p>
-          The final hours made the importance of that separation especially clear. Several implementations exceeded 45,500—and one exceeded 50,000—only by removing parts of the backward computation. They were interesting experiments, but they were not exact KDA training. Without an independent reference, frozen correctness gates, and a matched benchmark, they could easily have become the headline.
+          The final hours made that division of labor especially clear. Several surrogate variants produced numbers above the exact implementation, and one crossed 50,000 tokens per second by omitting trainable gradient paths. Those results were interesting as diagnostics, but they were not KDA training. Without a frozen oracle, full-gradient checks, and a benchmark that failed closed, it would have been easy to publish the larger, incorrect number.
         </p>
 
         <p>
-          So I do not think autograd has become unnecessary. In this project, PyTorch autograd remained the numerical reference that made aggressive custom kernels trustworthy. What became less necessary was writing every production training kernel by hand before exploring an architectural idea. With enough understanding to specify the computation, design the evaluation loop, and interrogate the results, an autoresearch agent can close much of that implementation gap.
+          This also changed how I think about autograd. I do not expect it to disappear from research code: it remains a remarkably useful way to express and revise a model. What changes is the cost of leaving it. Once an architecture and workload stabilize, an agent can help migrate the hot path into lower-level primitives much sooner than I would have attempted by hand. The difficult skill shifts from personally writing every kernel to specifying the computation, building tests that can falsify a candidate, and recognizing when the search is optimizing the wrong thing.
         </p>
 
         <p>
-          The most useful result, then, is not simply that the final kernel edged past FLA. It is that the distance between understanding a mechanism and obtaining a competitive hardware-specific training implementation became much shorter.
+          The most useful result, then, is not simply that the final kernel edged past FLA. It is that the distance between understanding a mechanism and obtaining a competitive, hardware-specific training implementation became much shorter.
         </p>
       </section>
     </article>
@@ -505,5 +586,6 @@
 <script src="shuffle.js"></script>
 <script src="kda-progress.js"></script>
 <script src="kda-optimization-log.js"></script>
+<script src="kda-training-comparison.js"></script>
 </body>
 </html>
