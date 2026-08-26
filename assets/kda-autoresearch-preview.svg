@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <pattern id="matrix" width="116" height="52" patternUnits="userSpaceOnUse">
+      <text x="0" y="20" fill="#123220" font-family="monospace" font-size="16" letter-spacing="7">0 1 K D A</text>
+      <text x="24" y="46" fill="#0b2617" font-family="monospace" font-size="15" letter-spacing="8">{ } 1 0</text>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="#030906"/>
+  <rect width="1200" height="630" fill="url(#matrix)" opacity="0.72"/>
+  <line x1="72" y1="64" x2="1128" y2="64" stroke="#1f3528"/>
+  <line x1="72" y1="566" x2="1128" y2="566" stroke="#1f3528"/>
+
+  <g font-family="monospace">
+    <text x="72" y="119" fill="#c1a461" font-size="18" letter-spacing="3">VEER PAREEK / RESEARCH NOTE</text>
+    <text x="72" y="216" fill="#d9ded9" font-size="43">Autoresearch on</text>
+    <text x="72" y="268" fill="#d9ded9" font-size="43">Kimi Delta Attention</text>
+    <text x="72" y="330" fill="#62b17a" font-size="31">833 → 44,942 tokens/s</text>
+    <text x="72" y="538" fill="#8a958e" font-size="16" letter-spacing="2">24 HOURS · EXACT TRAINING · NVIDIA GB10</text>
+  </g>
+
+  <g transform="translate(690 253)">
+    <path d="M0 210H430 M0 150H430 M0 90H430 M0 30H430" stroke="#183022" fill="none"/>
+    <path d="M0 43H430" stroke="#9b8248" stroke-width="1.5" stroke-dasharray="7 8" fill="none"/>
+    <text x="300" y="30" fill="#b89a58" font-family="monospace" font-size="13" letter-spacing="1">FLA · 43,937</text>
+    <path d="M4 228 L64 220 L103 181 L135 145 L171 119 L212 105 L254 79 L296 67 L337 50 L378 43 L426 30" stroke="#5da974" stroke-width="4" fill="none"/>
+    <g fill="#69b880" stroke="#030906" stroke-width="4">
+      <circle cx="4" cy="228" r="8"/>
+      <circle cx="103" cy="181" r="8"/>
+      <circle cx="212" cy="105" r="8"/>
+      <circle cx="296" cy="67" r="8"/>
+      <circle cx="378" cy="43" r="8"/>
+      <circle cx="426" cy="30" r="9"/>
+    </g>
+  </g>
+</svg>
