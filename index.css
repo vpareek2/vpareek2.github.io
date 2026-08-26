@@ -567,6 +567,34 @@ footer p { margin: 0; }
   font-size: .88rem;
 }
 
+.post-source-links {
+  margin: clamp(4.5rem, 11vh, 8rem) 0 .8rem;
+  color: var(--muted);
+  font-size: .62rem;
+  letter-spacing: .07em;
+}
+
+.post-source-links span {
+  margin: 0 .45rem;
+}
+
+.post-source-links a {
+  color: var(--green);
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in srgb, var(--green) 45%, transparent);
+  transition: color 160ms ease, border-color 160ms ease;
+}
+
+.post-source-links a:hover,
+.post-source-links a:focus-visible {
+  color: var(--gold);
+  border-color: var(--gold);
+}
+
+.post-source-links + .campaign-figure {
+  margin-top: 0;
+}
+
 .post-status {
   margin: clamp(4rem, 12vh, 8rem) 0 0;
   color: var(--green);
